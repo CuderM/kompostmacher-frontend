@@ -1,29 +1,29 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
+import React, { useState} from 'react';
+import 'bootstrap/dist/css/bootstrap.css';
+import'bootstrap-icons/font/bootstrap-icons.css'; 
 
 import MyNavbar from './routes/MyNavbar';
 import Admin from './routes/Admin';
+import WorkingPage from './routes/WorkingPage';
+import Login from './routes/Login';
+
+import { configureFakeBackend } from './services/fakeBackend.js';
+
+import createPDF from './components/PDFCreator';
+
+configureFakeBackend();
 
 function App() {
-  let navItems = [
-    { title:'Admin', to:'/', component:Admin}
-  ] // Array of objects with -> path & type 
+  const [active, setActive] = useState("Login");
 
   return (
-    <BrowserRouter>
-      <MyNavbar 
-        brandItem={{ title:'Kompostmacher', to:'/'}}
-        navItems={navItems}
-      >
-      </MyNavbar>
-      <main>
-        <Switch>
-          {navItems.map((navItem) => {
-            return (<Route key={navItem.to} exact path={navItem.to} component={navItem.component}></Route>)
-          })}
-        </Switch>
-      </main>
-    </BrowserRouter>
+    <div>
+      {active === "Login" && <Login></Login>}
+      {active === "Admin" && <Admin></Admin>}
+      {active === "WorkingPage" && <WorkingPage></WorkingPage>}
+    </div>
   );
 }
 
