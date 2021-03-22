@@ -106,6 +106,7 @@ function DataInput() {
                     onClick={() => { setShowPDF(true)/*setActive("PDF")*/}}>
                     Submit
                 </button>
+                <br/>
                 {showPDF ? <CreatePDF props={{produkte:products, kunde:kunden.filter(k => {return k.name === selectedValue})}}/> : <div/>}
             </div>
             }

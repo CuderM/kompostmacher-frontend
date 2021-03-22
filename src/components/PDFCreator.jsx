@@ -1,4 +1,5 @@
 import { formatDate } from './date-formatter';
+import head from '../pics/KompostmacherAnschrift.jpg';
 
 const createPDF = props => {
     let { kunde, produkte } = props.props;
@@ -7,7 +8,8 @@ const createPDF = props => {
 
     return (
         <div style={{width: "210mm", height: "297mm", textAlign: "center"}}>
-            <img src={ require('../pics/KompostmacherAnschrift.jpg') } alt="Kompostmacher Anschrift"></img>
+            <img src={ head } alt="Kompostmacher Anschrift"></img>
+            <br/>
             <div style={{display: "table", width: "100%"}}>
                 <div style={{display: "table-cell"}}>
                     <p><strong>An:</strong></p>
