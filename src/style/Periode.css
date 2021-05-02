@@ -1,0 +1,103 @@
+.header {
+    grid-area: header;
+}
+
+.form { 
+    grid-area: form; 
+    padding: 4%;
+    align-items: center;
+}
+
+.list { 
+    grid-area: list; 
+    align-items: center;
+    text-align: center;
+}
+
+.items { 
+    grid-area: items; 
+}
+
+.grid-container {
+    display: grid;
+    grid-template-areas:
+      'form form list'
+      'items items list'
+      'items items list'
+      'items items list';
+    grid-gap: 20px;
+}
+
+.h1{
+    text-align: center;
+    font-size: 20px;
+    padding-top: 20px;
+} 
+
+.iconFlex{
+    font-size: 15px;
+    size: 12px;
+    display:inline;
+}
+
+.sq{
+    color: gray;
+}
+
+.sq:hover{
+    color: green;
+}
+
+.tableRow{
+    /* align-items: center; */
+    padding-left: auto;
+    padding-right: auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.periodTable{
+    /* align-items: center; */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center; 
+   /* padding-left: auto;
+    padding-right: auto;
+    gap: 20px; */
+}
+
+.deleteSq{
+    color: gray;
+}
+
+.deleteSq:hover{
+    color: red;
+}
+
+.periodWrapper{
+    display: flex;
+    justify-content: center;
+}
+
+/* .listRow{
+    display:flex;
+    gap: 20px;
+    text-align: center;
+}*/
+
+.x:hover{
+    color: red;
+}
+
+p{
+    padding-right: 3px;
+}
+
+@media screen and (max-width: 600px) {
+    .grid-container{
+        grid-template-areas:
+        'list'
+        'form'
+        'items';
+    }
+}

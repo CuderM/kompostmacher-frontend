@@ -1,6 +1,6 @@
-import { dataService } from './dataService';
+import { authService } from './authService';
 
-const baseUrl = `api/users`;
+const baseUrl = process.env.REACT_APP_BACKEND_URL + '/users';
 
 export const userService = {
   getAll,
@@ -8,33 +8,37 @@ export const userService = {
   create,
   update,
   delete: _delete,
-  setDefaultUsers,
+  login, 
+  logout,
 };
 
+function login(credentials) {
+  return authService.login(`${baseUrl}/login`, credentials);
+}
+
+function logout(credentials) {
+  return authService.login(`${baseUrl}/logout`, credentials);
+}
+
 function getAll() {
-  return dataService.get(baseUrl);
+  return authService.get(baseUrl);
 }
 
 function getById(id) {
-  return dataService.get(`${baseUrl}/${id}`);
+  return authService.get(`${baseUrl}/${id}`);
 }
 
-function create(params) {
-  return dataService.post(baseUrl, params);
+function create(user) {
+  delete user.confirmedPassword;
+  return authService.post(baseUrl + '/register', user);
 }
 
-function update(id, params) {
-  return dataService.patch(`${baseUrl}/${id}`, params);
+function update(id, user) {
+  delete user.confirmedPassword;
+  return authService.patch(`${baseUrl}/${id}`, user);
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
 function _delete(id) {
-  return dataService.delete(`${baseUrl}/${id}`);
-}
-
-function setDefaultUsers() {
-  const requestOptions = {
-    method: 'PATCH',
-  };
-  return fetch(baseUrl + 'init', requestOptions);
+  return authService.delete(`${baseUrl}/${id}`);
 }

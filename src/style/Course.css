@@ -1,0 +1,57 @@
+.courseTable{
+    width: 100%;
+    text-align: center;
+}
+
+.content-wrapper{
+    padding: 10px;
+}
+
+.smaller{
+    max-height: 95%;
+}
+
+.styles_day__1cspH {
+    background-color:transparent !important;
+    /* background-image: linear-gradient(rgba(0,0,0,.08) 50%, transparent 50%); */
+    background-image: none !important;
+}
+
+.styles_day_title__1y-BE {
+    background-color: transparent !important;
+    font-size: 15px !important;
+    text-transform: none !important;
+    font-weight: normal !important;
+    /* border-left: 2px solid #383838 !important;*/
+    border-bottom: 2px solid #383838 !important; 
+}
+
+.styles_hour__EXCif {
+    background-color: transparent !important;
+    font-size: 15px !important;
+}
+
+.styles_day__1cspH {
+    border-right: 1px solid #383838 !important;
+}
+
+.Freitag {
+    width: calc((100% - 5rem) / 5.1) !important;
+    border-right: none !important;
+}
+
+.courseEvent{
+    background: #2589f5;
+    font-size: 16px;
+    text-align: center;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    height: 15vh;
+    line-height: 15vh;
+    font-weight: 300;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-bottom: 5px;
+}

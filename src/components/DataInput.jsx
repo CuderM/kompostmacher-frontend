@@ -115,5 +115,3 @@ function DataInput() {
     )
 }
 export default DataInput;
-
-{/**onChange={e => setProps({kid: e.target.value})} */}

@@ -1,0 +1,45 @@
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.firstOption {
+    color: white;
+    background-color:#0C0F1F !important;
+    width: 100%;
+    border-radius: 10px;
+    font-size: 14px;
+    height: 40px;
+    border-color: #0C0F1F;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+.firstOption:hover {
+    background-color:#74767e !important;
+}
+
+.firstOption:disabled,
+.firstOption[disabled]{
+  background-color: #cccccc;
+}
+
+
+.secondOption {
+    margin-top: 1em;
+    color: white 245;
+    background-color: transparent;
+    font-size: 14px;
+    border: none;
+    text-align: center;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+.inputLabel{
+    font-size: 14px !important;
+}
+
+.formLabel{
+    font-size: 30px !important;
+    text-align: center;
+}

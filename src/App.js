@@ -1,29 +1,62 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import './App.css';
-import React, { useState} from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
-import'bootstrap-icons/font/bootstrap-icons.css'; 
+import './style/App.css';
 
-import MyNavbar from './routes/MyNavbar';
-import Admin from './routes/Admin';
-import WorkingPage from './routes/WorkingPage';
-import Login from './routes/Login';
+import React, { useState } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
-import { configureFakeBackend } from './services/fakeBackend.js';
+import MyNavbar from './components/Navbar.jsx';
+import MySwitch from "./components/Switch.jsx"
 
-import createPDF from './components/PDFCreator';
+import Signup from './components/Register';
+import Login from './components/Login';
 
-configureFakeBackend();
+import WorkingPage from './components/WorkingPage';
+import Admin from './components/Admin';
+
+import SimpleForm from './components/SimpleForm';
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const [active, setActive] = useState("Login");
+  const [userStatus, setUserStatus] = useState("login");
+
+  let navItems = [
+    { title: 'Admin', to: '/admin', component: Admin, icon: "bi bi-list" },
+    { title: 'WorkingPage', to: '/workingpage', component: WorkingPage, icon: "bi bi-list" },
+    { title: 'SimpleForm', to:'/SimpleForm/:userId', component: SimpleForm, icon: "bi bi-list" }
+  ];
+
+  let otherRoutes = [
+    { title: 'SimpleForm', to:'/SimpleForm/:userId', component: SimpleForm, icon: "bi bi-list" }
+  ];
+
+  let authenticationRoutes = [
+    { to: '/login', component: () => <Login setUserStatus={setUserStatus}/> },
+    { to: '/signup', component: () => <Signup setUserStatus={setUserStatus}/> },
+  ]
+
+
+  if (userStatus === 'login') {
+    return <div className="form-wrapper">
+      <BrowserRouter>
+        <ToastContainer />
+        <MySwitch otherRoutes={authenticationRoutes} redirect={"/login"}></MySwitch>
+      </BrowserRouter>
+    </div>
+  }
 
   return (
-    <div>
-      {active === "Login" && <Login></Login>}
-      {active === "Admin" && <Admin></Admin>}
-      {active === "WorkingPage" && <WorkingPage></WorkingPage>}
-    </div>
+    <BrowserRouter>
+      <ToastContainer />
+      <div className="page-content-wrapper">
+        <div className="sidebar-wrapper">
+          <MyNavbar navItems={navItems}></MyNavbar>
+        </div>
+        <div className="content-wrapper">
+          <MySwitch navItems={navItems} otherRoutes={otherRoutes} redirect={"/admin"}></MySwitch>
+        </div>
+      </div>
+    </BrowserRouter>
   );
 }
 

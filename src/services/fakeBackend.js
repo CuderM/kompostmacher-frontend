@@ -1,97 +1,7 @@
 export function configureFakeBackend() {
-  const timeOfLatency = 1000;
+  const timeOfLatency = 0;
 
   let defaultUsers = [
-    {
-      _id: '5fce46cc305c2d245480a74d',
-      username: 'Debbie@chat.app',
-      password: 12345,
-      age: 29,
-      state: 'online',
-      firstname: 'Shaffer',
-      lastname: 'Henry',
-      gender: 'male',
-    },
-    {
-      _id: '5fce46cc5ce207bffd2c464c',
-      username: 'Tammy@chat.app',
-      password: 12345,
-      age: 52,
-      state: 'online',
-      firstname: 'Jeannie',
-      lastname: 'Grant',
-      gender: 'female',
-    },
-    {
-      _id: '5fce46cccd54e2c4c0d7a823',
-      username: 'Haley@chat.app',
-      password: 12345,
-      age: 49,
-      state: 'offline',
-      firstname: 'Maryann',
-      lastname: 'Valentine',
-      gender: 'female',
-    },
-    {
-      _id: '5fce46ccd5bc01bcc58eddff',
-      username: 'Henrietta@chat.app',
-      password: 12345,
-      age: 22,
-      state: 'online',
-      firstname: 'Sharpe',
-      lastname: 'Stark',
-      gender: 'male',
-    },
-    {
-      _id: '5fce46cc15bc32f1ecf33861',
-      username: 'Hudson@chat.app',
-      password: 12345,
-      age: 57,
-      state: 'offline',
-      firstname: 'Pratt',
-      lastname: 'Schmidt',
-      gender: 'male',
-    },
-    {
-      _id: '5fce46ccec79e10fc8d2169f',
-      username: 'Katelyn@chat.app',
-      password: 12345,
-      age: 23,
-      state: 'offline',
-      firstname: 'Wells',
-      lastname: 'Noel',
-      gender: 'male',
-    },
-    {
-      _id: '5fce46ccb1f1f58f8ebf29cd',
-      username: 'Flossie@chat.app',
-      password: 12345,
-      age: 35,
-      state: 'online',
-      firstname: 'Lucy',
-      lastname: 'Bell',
-      gender: 'female',
-    },
-    {
-      _id: '5fce46ccbcf604e0928f6659',
-      username: 'Kendra@chat.app',
-      password: 12345,
-      age: 51,
-      state: 'offline',
-      firstname: 'Edith',
-      lastname: 'Mclean',
-      gender: 'female',
-    },
-    {
-      _id: '5fce46ccf4f27b02c72f5489',
-      username: 'Franklin@chat.app',
-      password: 12345,
-      age: 42,
-      state: 'offline',
-      firstname: 'Kristi',
-      lastname: 'Salazar',
-      gender: 'female',
-    },
     {
       _id: '5fce46cc87843db743cea878',
       username: 'Hays@chat.app',
@@ -103,9 +13,10 @@ export function configureFakeBackend() {
       gender: 'female',
     },
   ];
+
   let users = JSON.parse(localStorage.getItem('users')) || defaultUsers;
 
-  let routesToFake = [/*'api/users'*/];
+  let routesToFake = [];
 
   const urlToFake = (url) => {
     return routesToFake.some((u) => url.includes(u));
@@ -115,6 +26,7 @@ export function configureFakeBackend() {
   let realFetch = window.fetch;
   window.fetch = function (url, opts) {
     return new Promise((resolve, reject) => {
+      console.log('fetch');
       // fakebackend umbauen
       // zuerst muss man die URL auswerten und dann kann man entscheiden ob man realFetch durchzieht oder auf
       // das fake-backend durchgeht
@@ -131,10 +43,12 @@ export function configureFakeBackend() {
       }
 
       function handleRoute() {
+        console.log('HandleRoute');
         const { method } = opts;
         switch (true) {
-          case url.endsWith('/users') && method === 'GET':
-            return getUsers();
+          /*case url.endsWith('/users/login') && method === 'POST':
+            return getUserByUsernameAndPassword();*/
+
           case url.match(/\/users\/+/) && method === 'GET':
             return getUserById();
           case url.endsWith('/users') && method === 'POST':
@@ -155,9 +69,9 @@ export function configureFakeBackend() {
 
       // route functions
 
-      function getUsers() {
-        return ok(users);
-      }
+      // function getUsers() {
+      //   return ok(users, { 'content-type': 'application/json' });
+      // }
 
       function setDefaultUsers() {
         users = defaultUsers;
@@ -172,7 +86,7 @@ export function configureFakeBackend() {
         let user = users.find((x) => x._id === lookupId);
         if (!user) return error(404, `user with ${lookupId} not found`);
 
-        return ok(user);
+        return ok(user, { 'content-type': 'application/json' });
       }
 
       function createUser() {
@@ -225,10 +139,12 @@ export function configureFakeBackend() {
       }
 
       // helper functions
-      function ok(body) {
+      function ok(body, headers) {
         resolve({
           ok: true,
-          text: () => Promise.resolve(JSON.stringify(body)),
+          text: () => Promise.resolve(body),
+          json: () => Promise.resolve(body),
+          headers,
         });
       }
 
