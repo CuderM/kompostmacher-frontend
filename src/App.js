@@ -13,6 +13,7 @@ import WorkingPage from './components/WorkingPage';
 import Admin from './components/Admin';
 
 import SimpleForm from './components/SimpleForm';
+import Form from './components/Form';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,11 +24,11 @@ function App() {
   let navItems = [
     { title: 'Admin', to: '/admin', component: Admin, icon: "bi bi-list" },
     { title: 'WorkingPage', to: '/workingpage', component: WorkingPage, icon: "bi bi-list" },
-    { title: 'SimpleForm', to:'/SimpleForm/:userId', component: SimpleForm, icon: "bi bi-list" }
   ];
 
   let otherRoutes = [
-    { title: 'SimpleForm', to:'/SimpleForm/:userId', component: SimpleForm, icon: "bi bi-list" }
+    { title: 'SimpleForm', to:'/SimpleForm/:userId', component: SimpleForm, icon: "bi bi-list" },
+    { title: 'Form', to:'/form/:id', component: Form, icon: "bi bi-list" }
   ];
 
   let authenticationRoutes = [

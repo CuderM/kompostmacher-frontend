@@ -15,8 +15,10 @@ export default function Admin() {
     const [customers, setCustomers] = useState([]);
     const [products, setProducts] = useState([]);
     const [users, setUsers] = useState([]);
-    const [collectionConfirmations, setCollectionConfirmation] = useState([]);
+    const [collectionConfirmations, setCollectionConfirmations] = useState([]);
     const [sortState, setSortState] = useState({key: '', reversed: false});
+
+
 
     useEffect(() => {                               
         customerService.getAll()
@@ -51,12 +53,71 @@ export default function Admin() {
                     cc.product = cc.product.name;
                 });
 
-                setCollectionConfirmation(_collectionConfirmation);
+                setCollectionConfirmations(_collectionConfirmation);
             })
             .catch(err => {
                 toast.error(err);
             });
     }, []);
+
+    const openForm = (url) => {
+        history.push({
+            pathname: url,
+            createFormValidInfo: (valid) => {
+                return {
+                    'firstname': {
+                        valid: valid,
+                        msg: ''
+                    },
+                    'lastname': {
+                        valid: valid,
+                        msg: ''
+                    },
+                    'username': {
+                        valid: valid,
+                        msg: ''
+                    },
+                    'password': {
+                        valid: valid,
+                        msg: ''
+                    },
+                    'form': {
+                        valid: valid,
+                        msg: ''
+                    }
+                }
+            },
+            getEntityById: userService.getById,
+            entityCreate: userService.create,
+            entityUpdate: userService.update,
+            checkFields: (name, value, formValidInfo) => {
+                    let validationInfo;
+            
+                    switch(name) {
+                        case 'firstname':
+                            validationInfo = checkFirstname(value);
+                            break;
+                        case 'lastname':
+                            validationInfo = checkLastname(value);
+                            break;
+                        case 'username':
+                            validationInfo = checkUsername(value);
+                            break;
+                        case 'password':
+                            validationInfo = checkPassword(value, name);
+                            break;
+                        default:
+                    }
+            
+                    return {
+                        ...formValidInfo,
+                        [name]: validationInfo
+                    }
+                }
+        })
+    }
+
+//#region deletes
 
     const _deleteCustomer = (customer) => {
         customerService.delete(customer._id).then(() => {
@@ -65,30 +126,87 @@ export default function Admin() {
         });    
     }
 
-    const _deleteProduct = (customer) => {
-        productService.delete(customer._id).then(() => {
-            let newCostumer = customers.filter(u => u._id !== customer._id);
-            setCustomers(newCostumer);
+    const _deleteProduct = (product) => {
+        productService.delete(product._id).then(() => {
+            let newProducts = products.filter(u => u._id !== product._id);
+            setProducts(newProducts);
         });    
     }
 
-    const _deleteUser = (customer) => {
-        userService.delete(customer._id).then(() => {
-            let newCostumer = customers.filter(u => u._id !== customer._id);
-            setCustomers(newCostumer);
+    const _deleteUser = (user) => {
+        userService.delete(user._id).then(() => {
+            let newUsers = users.filter(u => u._id !== user._id);
+            setUsers(newUsers);
         });    
     }
 
-    const _deleteCC = (customer) => {
-        collectionConfirmationService.delete(customer._id).then(() => {
-            let newCostumer = customers.filter(u => u._id !== customer._id);
-            setCustomers(newCostumer);
+    const _deleteCC = (cc) => {
+        collectionConfirmationService.delete(cc._id).then(() => {
+            let newCCs = collectionConfirmations.filter(u => u._id !== cc._id);
+            setCollectionConfirmations(newCCs);
         });    
     }
 
-    const openForm = (url) => {
-        history.push(url);
+//#endregion
+
+//#region checks
+
+//#region user
+    function checkFirstname(fn) {
+        let msg = 'ok';
+        let valid = true;
+        return { valid, msg };
     }
+
+    function checkLastname(fn) {
+        let msg = 'ok';
+        let valid = true;
+
+        if(!fn)  {
+            msg = 'last name is not allowed to be empty';
+            valid = false;
+        }
+
+        return { valid, msg };
+    }
+
+    function checkUsername(fn) {
+        let msg = 'ok';
+        let valid = true;
+
+        if(!fn)  {
+            msg = 'username is not allowed to be empty';
+            valid = false;
+        } else {
+            if(fn.length < 4) {
+                msg = 'first name is too short';
+                valid = false;
+            } else if(fn.length > 20) {
+                msg = 'first name is too long';
+                valid = false;
+            }
+        }
+        return { valid, msg };
+    }
+
+    function checkPassword(g, name) {
+        let msg = 'ok';
+        let valid = true;
+
+        if(g.length < 6) {
+            msg = 'first name is too short';
+            valid = false;
+        }
+
+        return { valid, msg };
+    }
+//#endregion
+
+
+
+//#endregion
+
+//#region sort things
 
     function sortBy(sortkrit) {
         let newSortKrit = {};
@@ -117,6 +235,8 @@ export default function Admin() {
         else
             return 'bi bi-sort-up';
     }
+
+//#endregion
 
     return [
         <TableEntities
@@ -161,7 +281,7 @@ export default function Admin() {
             getSortSymbol={getSortSymbol}
             entities={users}
             entity='Benutzer'
-            formUrl='/SimpleForm/'
+            formUrl='/form/'
         ></TableEntities>,
         <br/>,
         <TableEntities

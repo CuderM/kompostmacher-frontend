@@ -13,53 +13,47 @@ export default function SimpleForm () {
 
     const FormMode = { NOT_FOUND:0, NEW:1, UPDATE:2,     }; 
     const [formMode, setFormMode] = useState(FormMode.NOT_FOUND);
+    const [formUser, setFormUser] = useState({}); 
 
-    const [formUser, setFormUser] = useState({});
-
-    let formValidationInfoDEMO = {
-        'firstname': {
-            valid: false,
-            msg: ''
-        },
-        'lastname': {
-            valid: false,
-            msg: ''
-        },
-        'username': {
-            valid: false,
-            msg: ''
-        },
-        'password': {
-            valid: false,
-            msg: ''
-        },
-        'form': {
-            valid: false,
-            msg: ''
+    function createFormValidInfo(valid) {
+        return {
+            'firstname': {
+                valid: valid,
+                msg: ''
+            },
+            'lastname': {
+                valid: valid,
+                msg: ''
+            },
+            'username': {
+                valid: valid,
+                msg: ''
+            },
+            'password': {
+                valid: valid,
+                msg: ''
+            },
+            'form': {
+                valid: valid,
+                msg: ''
+            }
         }
     }
 
-    const [formValidationInfo, setFormValidationInfo] = useState(formValidationInfoDEMO);
+    const [formValidationInfo, setFormValidationInfo] = useState(createFormValidInfo(true));
     const history = useHistory();
-
-    function checkEveryField() {
-        Object.keys(formUser).map(attr => {
-            delete formUser._id
-            validateField(attr, formUser[attr])
-        })
-    }
 
     useEffect(() => {
         let componentIsMounted = true;
 
         if(userId.toLowerCase() === 'new') {
             setFormMode(FormMode.NEW);
+            setFormValidationInfo(createFormValidInfo(false));
         } else {
             userService.getById(userId)
                 .then(u => {
                     if(componentIsMounted) {
                         setFormUser(u);
-                        checkEveryField()
                         setFormMode(FormMode.UPDATE);
                     }
                 })
@@ -151,6 +145,7 @@ export default function SimpleForm () {
             {
                 formValid = false;
             }
+            return {}
         })
 
         newFormValidationInfo.form = {
@@ -226,20 +221,26 @@ export default function SimpleForm () {
                 </div>
             </div>
             <br/>
-            <button 
+            {
+                formMode === 1 && 
+                <button 
                 type="button" 
                 className="btn btn-primary"
                 onClick={() => { submitForm(true) }}
                 disabled={!formValidationInfo["form"]?.valid}>
-                Submit
-            </button>
-            <button 
-                type="button" 
-                className="btn btn-primary"
-                onClick={() => { submitForm(false) }}
-                disabled={!formValidationInfo["form"]?.valid}>
                 Create
-            </button>
+                </button>
+            }
+            {
+                formMode !== 1 && 
+                <button 
+                    type="button" 
+                    className="btn btn-primary"
+                    onClick={() => { submitForm(false) }}
+                    disabled={!formValidationInfo["form"]?.valid}>
+                    Submit
+                </button>
+            }
         </form>
     ]
 }
