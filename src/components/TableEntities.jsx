@@ -32,23 +32,20 @@ export default function TableEntities(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {entities && entities.map((entity) => 
-                        <tr key={entity._id} onClick={() => openForm(formUrl + entity._id)}>
-                    { /* <th scope="row">{entity._id}</th> */}
-                            { delete entity.password }
-                            
-                            
-                            {   Object.keys(entity).map(attr => {
+                    {entities && entities.map((ent) => 
+                        <tr key={ent._id} onClick={() => openForm(formUrl + ent._id, entity)}>
+                            { delete ent.password }
+                            {   Object.keys(ent).map(attr => {
                                     if(attr !== '_id') {
-                                        var value = entity[attr];
+                                        var value = ent[attr];
                                         return <td>{value}</td>
                                     }
+                                    return {}
                                 })
                             }
-                            
                             <td>
                                 <button className="btn-sm btn-danger" 
-                                    onClick={() => _delete(entity)}>
+                                    onClick={() => _delete(ent)}>
                                     X
                                 </button>
                             </td>

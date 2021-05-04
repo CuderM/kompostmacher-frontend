@@ -60,60 +60,77 @@ export default function Admin() {
             });
     }, []);
 
-    const openForm = (url) => {
+    const openForm = (url, entity) => {
+        switch(entity) {
+            case 'Benutzer':
+                _openForm(
+                    url, 
+                    (valid) => {
+                        return {
+                            'firstname': {
+                                valid: valid,
+                                msg: ''
+                            },
+                            'lastname': {
+                                valid: valid,
+                                msg: ''
+                            },
+                            'username': {
+                                valid: valid,
+                                msg: ''
+                            },
+                            'password': {
+                                valid: valid,
+                                msg: ''
+                            },
+                            'form': {
+                                valid: valid,
+                                msg: ''
+                            }
+                        }
+                    },
+                    userService.getById,
+                    userService.create,
+                    userService.update,
+                    (name, value, formValidInfo) => {
+                        let validationInfo;
+                
+                        switch(name) {
+                            case 'firstname':
+                                validationInfo = checkFirstname(value);
+                                break;
+                            case 'lastname':
+                                validationInfo = checkLastname(value);
+                                break;
+                            case 'username':
+                                validationInfo = checkUsername(value);
+                                break;
+                            case 'password':
+                                validationInfo = checkPassword(value, name);
+                                break;
+                            default:
+                        }
+                
+                        return {
+                            ...formValidInfo,
+                            [name]: validationInfo
+                        }
+                    }
+                    );
+                break;
+            default:
+                toast.error('something went wrong');
+        }
+    }
+
+    const _openForm = (_url, _createFormValidInfo, _getEntityById, _entityCreate, _entityUpdate, _checkFields) => {
         history.push({
-            pathname: url,
-            createFormValidInfo: (valid) => {
-                return {
-                    'firstname': {
-                        valid: valid,
-                        msg: ''
-                    },
-                    'lastname': {
-                        valid: valid,
-                        msg: ''
-                    },
-                    'username': {
-                        valid: valid,
-                        msg: ''
-                    },
-                    'password': {
-                        valid: valid,
-                        msg: ''
-                    },
-                    'form': {
-                        valid: valid,
-                        msg: ''
-                    }
-                }
-            },
-            getEntityById: userService.getById,
-            entityCreate: userService.create,
-            entityUpdate: userService.update,
-            checkFields: (name, value, formValidInfo) => {
-                    let validationInfo;
-            
-                    switch(name) {
-                        case 'firstname':
-                            validationInfo = checkFirstname(value);
-                            break;
-                        case 'lastname':
-                            validationInfo = checkLastname(value);
-                            break;
-                        case 'username':
-                            validationInfo = checkUsername(value);
-                            break;
-                        case 'password':
-                            validationInfo = checkPassword(value, name);
-                            break;
-                        default:
-                    }
-            
-                    return {
-                        ...formValidInfo,
-                        [name]: validationInfo
-                    }
-                }
+            pathname: _url,
+            createFormValidInfo: _createFormValidInfo,
+            getEntityById: _getEntityById,
+            entityCreate: _entityCreate,
+            entityUpdate: _entityUpdate,
+            checkFields: _checkFields
         })
     }
 
