@@ -7,6 +7,7 @@ export const collectionConfirmationService = {
   getById,
   create,
   update,
+  getFormular,
   delete: _delete,
 };
 
@@ -16,6 +17,10 @@ function getAll() {
 
 function getById(id) {
   return authService.get(`${baseUrl}/${id}`);
+}
+
+function getFormular(collectionConfirmationData) {
+  return authService.post(`${baseUrl}/formular`, collectionConfirmationData);
 }
 
 function create(collectionConfirmation) {

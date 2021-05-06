@@ -20,44 +20,48 @@ export default function Admin() {
 
 
 
-    useEffect(() => {                               
-        customerService.getAll()
-            .then(_customers => {
-                console.log(_customers)
-                setCustomers(_customers);
-            })
-            .catch(() => {
-                toast.error('Failed to load periods');
-            });
-        userService.getAll()
-            .then(_users => {
-                console.log(_users)
-                setUsers(_users);
-            })
-            .catch(() => {
-                toast.error('Failed to load periods');
-            });
-        productService.getAll()
-            .then(_products => {
-                console.log(_products)
-                setProducts(_products);
-            })
-            .catch(() => {
-                toast.error('Failed to load periods');
-            });
-        collectionConfirmationService.getAll()
-            .then(_collectionConfirmation => {
-                console.log(_collectionConfirmation)
-                _collectionConfirmation.forEach(cc => {
-                    cc.customer = cc.customer.name;
-                    cc.product = cc.product.name;
+    useEffect(() => {    
+        try {                           
+            customerService.getAll()
+                .then(_customers => {
+                    console.log(_customers)
+                    setCustomers(_customers);
+                })
+                .catch(() => {
+                    toast.error('Failed to load periods');
                 });
-
-                setCollectionConfirmations(_collectionConfirmation);
-            })
-            .catch(err => {
-                toast.error(err);
-            });
+            userService.getAll()
+                .then(_users => {
+                    console.log(_users)
+                    setUsers(_users);
+                })
+                .catch(() => {
+                    toast.error('Failed to load periods');
+                });
+            productService.getAll()
+                .then(_products => {
+                    console.log(_products)
+                    setProducts(_products);
+                })
+                .catch(() => {
+                    toast.error('Failed to load periods');
+                });
+            collectionConfirmationService.getAll()
+                .then(_collectionConfirmation => {
+                    console.log(_collectionConfirmation)
+                    _collectionConfirmation.forEach(cc => {
+                        cc.customer = cc.customer.name;
+                        cc.product = cc.product.name;
+                    });
+                    setCollectionConfirmations(_collectionConfirmation);
+                })
+                .catch(err => {
+                    toast.error(err);
+                });
+            }
+        catch(err) {
+            toast.error(err);
+        }
     }, []);
 
     const openForm = (url, entity) => {
@@ -115,22 +119,126 @@ export default function Admin() {
                             ...formValidInfo,
                             [name]: validationInfo
                         }
-                    }
+                    },
+                    entity
                     );
                 break;
-            default:
+            case 'Kunden':
+                _openForm(
+                    url, 
+                    (valid) => {
+                        return {
+                            'name': {
+                                valid: valid,
+                                msg: ''
+                            },
+                            'adresse': {
+                                valid: valid,
+                                msg: ''
+                            },
+                            'anschrift': {
+                                valid: valid,
+                                msg: ''
+                            },
+                            'email': {
+                                valid: valid,
+                                msg: ''
+                            },
+                            'form': {
+                                valid: valid,
+                                msg: ''
+                            }
+                        }
+                    },
+                    customerService.getById,
+                    customerService.create,
+                    customerService.update,
+                    (name, value, formValidInfo) => {
+                        let validationInfo = {'valid': true, 'msg': 'ok' };
+                        
+                        /*
+                        switch(name) {
+                            case 'name':
+                                validationInfo = checkFirstname(value);
+                                break;
+                            case 'adresse':
+                                validationInfo = checkLastname(value);
+                                break;
+                            case 'anschrift':
+                                validationInfo = checkUsername(value);
+                                break;
+                            case 'email':
+                                validationInfo = checkPassword(value, name);
+                                break;
+                            default:
+                        }*/
+                
+                        return {
+                            ...formValidInfo,
+                            [name]: validationInfo
+                        }
+                    },
+                    entity
+                    );
+                break;
+            case 'Produkte':
+                _openForm(
+                    url, 
+                    (valid) => {
+                        return {
+                            'name': {
+                                valid: valid,
+                                msg: ''
+                            },
+                            'einheit': {
+                                valid: valid,
+                                msg: ''
+                            },
+                            'form': {
+                                valid: valid,
+                                msg: ''
+                            }
+                        }
+                    },
+                    productService.getById,
+                    productService.create,
+                    productService.update,
+                    (name, value, formValidInfo) => {
+                        let validationInfo = {'valid': true, 'msg': 'ok' };
+                        
+                        /*
+                        switch(name) {
+                            case 'name':
+                                validationInfo = checkFirstname(value);
+                                break;
+                            case 'einheit':
+                                validationInfo = checkLastname(value);
+                                break;
+                            default:
+                        }*/
+                
+                        return {
+                            ...formValidInfo,
+                            [name]: validationInfo
+                        }
+                    },
+                    entity
+                    );
+                break;
+                default:
                 toast.error('something went wrong');
         }
     }
 
-    const _openForm = (_url, _createFormValidInfo, _getEntityById, _entityCreate, _entityUpdate, _checkFields) => {
+    const _openForm = (_url, _createFormValidInfo, _getEntityById, _entityCreate, _entityUpdate, _checkFields, _entity) => {
         history.push({
             pathname: _url,
             createFormValidInfo: _createFormValidInfo,
             getEntityById: _getEntityById,
             entityCreate: _entityCreate,
             entityUpdate: _entityUpdate,
-            checkFields: _checkFields
+            checkFields: _checkFields,
+            entity: _entity
         })
     }
 
@@ -269,7 +377,7 @@ export default function Admin() {
             getSortSymbol={getSortSymbol}
             entities={customers}
             entity='Kunden'
-            formUrl='/SimpleForm/'
+            formUrl='/form/'
         ></TableEntities>,
         <br/>,
         <TableEntities
@@ -283,7 +391,7 @@ export default function Admin() {
             getSortSymbol={getSortSymbol}
             entities={products}
             entity='Produkte'
-            formUrl='/SimpleForm/'
+            formUrl='/form/'
         ></TableEntities>,
         <br/>,
         <TableEntities

@@ -1,116 +1,137 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+import { productService } from '../services/productService';
+import { customerService } from '../services/customerService';
 
 import CreatePDF from './PDFCreator';
-
-let kunden;
-let produkte;
-
-function createArrays() {
-    kunden = [
-        {
-            'name': 'Geimeinde Wernberg',
-            'adresse': 'Bundesstrasse 11',
-            'anschrift': '9241 Wernberg'
-        },
-        {
-            'name': 'Geimeinde Villach',
-            'adresse': 'Magistratsplatz 1',
-            'anschrift': '9500 Villach'
-        },
-        {
-            'name': 'Geimeinde Klagenfurt',
-            'adresse': 'Villacherstraße 31',
-            'anschrift': '9020 Klagenfurt'
-        }
-    ];
-
-    produkte = [
-        {
-            'name': 'Strauchschnitt',
-            'einheit': 'm³'
-        },
-        {
-            'name': 'Grünzeugs',
-            'einheit': 'l'
-        }
-    ];
-
-    localStorage.kunden = JSON.stringify(kunden);
-    localStorage.produkte = JSON.stringify(produkte);
-}
+import { collectionConfirmationService } from '../services/collectionConfirmationService';
 
 function DataInput() {
-    const [active] = useState("DI");
-    const [props, setProps] = useState({kid: "", pid: "", menge: ""});
+    const history = useHistory();
+    const [customers, setCustomers] = useState([]);
+    const [products, setProducts] = useState([]);
+    const [currProduct, setCurrProduct] = useState({});
+    const [selectedInput, setSelectedInput] = useState({
+        customer: customers[0] || '',
+        products: []
+    });
 
-    const [showPDF, setShowPDF] = useState(false);
-
-    const [products, setProdukte] = useState([])
-
-    const [selectedValue, setSelectedValue] = useState();
-    const [selectedValuea, setSelectedValuea] = useState({});
-    const [selectedValueb, setSelectedValueb] = useState();
-
-    function addProdukt() {
-        let prods = products;
-        let prod = {
-            menge: selectedValueb.menge,
-            produkt: produkte.filter(p => {return p.name === selectedValuea})
+    useEffect(() => {    
+        try {                           
+            customerService.getAll()
+                .then(_customers => {
+                    console.log(_customers)
+                    setCustomers(_customers);
+                })
+                .catch(() => {
+                    toast.error('Failed to load periods');
+                });
+            productService.getAll()
+                .then(_products => {
+                    console.log(_products)
+                    setProducts(_products);
+                })
+                .catch(() => {
+                    toast.error('Failed to load periods');
+                });
+            }
+        catch(err) {
+            toast.error(err);
         }
-        prods.push(prod);
-        setProdukte(prods);
+    }, []);
+
+    const onChange = (event) => {
+        const { name, selectedOptions, value } = event.target;
+        try {
+            switch(name) {
+                case 'customer':
+                    customerService.getById(selectedOptions[0].id)
+                        .then(data => {
+                            setSelectedInput({...selectedInput, 'customer': data});
+                        })
+                        .catch(err => {
+                            toast.error(err);
+                        });
+                    break;
+                case 'product':
+                    productService.getById(selectedOptions[0].id)
+                        .then(data => {
+                            setCurrProduct({...currProduct, 'product': data})
+                        })
+                        .catch(err => {
+                            toast.error(err);
+                        });
+                    break;
+                case 'amount':
+                    setCurrProduct({...currProduct, 'amount': value})
+                    break;
+                default:
+                    toast.error('something went wrong!');
+            }
+        }
+        catch(err) {
+            toast.error(err);
+        }
     }
 
-    createArrays();
-    kunden = JSON.parse(localStorage.kunden);
-    produkte = JSON.parse(localStorage.produkte);
+    function addProduct() {
+        setSelectedInput({...selectedInput, 'products': [...selectedInput.products, currProduct]})
+        setCurrProduct({})
+    }
+
+    function submit() {
+    }
 
     return (
         <div>
-            {active === "DI" && 
             <div style={{textAlign: "center"}}>
-                <select key="kid" onChange={(e) => {setSelectedValue(e.target.value)}}>
-                {
-                    kunden.map(kunde => {
-                        return <option value={kunde.name}>{kunde.name}</option>
-                    })
-                }
+                <select 
+                    key="customer" 
+                    name="customer" 
+                    onChange={onChange}>
+                    {
+                        customers.map(customer => {
+                            return <option id={customer._id} value={customer.name}>{customer.name}</option>
+                        })
+                    }
                 </select>
                 <br/>
-                <select select="" key="pid" onChange={(e) => {setSelectedValuea(e.target.value)}}>
-                {
-                    produkte.map(produkt => {
-                        return <option value={produkt.value}>{produkt.name}</option>
-                    })
-                }
+                <select 
+                    key="product"
+                    name="product" 
+                    onChange={onChange}>
+                    {
+                        products.map(product => {
+                            return <option id={product._id}value={product.value}>{product.name}</option>
+                        })
+                    }
                 </select>
                 <br/>
                 <input 
                     type="number" 
                     id="inputMenge" 
                     placeholder="Menge"
-                    name='menge'
-                    onChange={e => setSelectedValueb({menge: e.target.value})}
+                    key='amount'
+                    name="amount" 
+                    onChange={onChange}
                 >
                 </input>
                 <br/>
                 <button 
                     type="submit" 
                     class="btn btn-primary"
-                    onClick={() => {setProps({kid: kunden.filter(k => {return k.name === selectedValue}), pid: produkte.filter(p => {return p.name === selectedValuea}), menge: selectedValueb}); addProdukt();}}>
-                    Confirm
+                    onClick={addProduct}>
+                    add Produkt
                 </button>
                 <button 
                     type="submit" 
-                    class="btn btn-primary"
-                    onClick={() => { setShowPDF(true)/*setActive("PDF")*/}}>
+                    class="btn btn-primary">
                     Submit
                 </button>
                 <br/>
-                {showPDF ? <CreatePDF props={{produkte:products, kunde:kunden.filter(k => {return k.name === selectedValue})}}/> : <div/>}
             </div>
-            }
-            {/*active === "PDF" && <CreatePDF props={props}></CreatePDF>*/}
         </div>
     )
 }

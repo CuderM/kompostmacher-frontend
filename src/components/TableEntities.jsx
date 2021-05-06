@@ -1,14 +1,8 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom';
 // import '../style/Login.css';
 
 export default function TableEntities(props) {
     const { tableHeader, sortBy, getSortSymbol, _delete, entities, entity, formUrl, openForm } = props;
-    const history = useHistory();
-
-    const openCreateForm = () => {
-        history.push('/SimpleForm');
-    }
 
     return [
         <br></br>,
@@ -33,14 +27,14 @@ export default function TableEntities(props) {
                 </thead>
                 <tbody>
                     {entities && entities.map((ent) => 
-                        <tr key={ent._id} onClick={() => openForm(formUrl + ent._id, entity)}>
+                        <tr key={ent._id}>
                             { delete ent.password }
                             {   Object.keys(ent).map(attr => {
                                     if(attr !== '_id') {
                                         var value = ent[attr];
-                                        return <td>{value}</td>
+                                        return <td onClick={() => openForm(formUrl + ent._id, entity)}>{value}</td>
                                     }
-                                    return {}
+                                    return ''
                                 })
                             }
                             <td>
@@ -55,7 +49,7 @@ export default function TableEntities(props) {
             </table>
         </div>,
         <button className="btn btn-secondary btn-in-list"
-            onClick={() => openCreateForm(formUrl + 'new')}>
+            onClick={() => openForm(formUrl + 'new', entity)}>
             add new { entity }
         </button>
     ]

@@ -6,9 +6,9 @@ import'bootstrap-icons/font/bootstrap-icons.css';
 
 import { useLocation } from 'react-router-dom';
 
-export default function Form (props) {
+export default function Form () {
     const location = useLocation();
-    const {createFormValidInfo, getEntityById, entityCreate, entityUpdate, checkFields } = location;
+    const {createFormValidInfo, getEntityById, entityCreate, entityUpdate, checkFields, entity } = location;
 
     let { id } = useParams();
 
@@ -19,12 +19,45 @@ export default function Form (props) {
     const [formValidationInfo, setFormValidationInfo] = useState(createFormValidInfo(true));
     const history = useHistory();
 
+    function getExmplEntity() {
+        let ent;
+
+        switch(entity) {
+            case 'Benutzer':
+                ent = {
+                    firstname: '',
+                    lastname: '',
+                    username: '',
+                    password: ''
+                }
+                break;
+            case 'Produkte':
+                ent = {
+                    name: '',
+                    einheit: ''
+                }
+                break;
+            case 'Kunden':
+                ent = {
+                    name: '',
+                    adresse: '',
+                    anschrift: '',
+                    email: ''
+                }
+                break;
+            default:
+        }
+
+        return ent;
+    }
+
     useEffect(() => {
         let componentIsMounted = true;
 
         if(id.toLowerCase() === 'new') {
             setFormMode(FormMode.NEW);
             setFormValidationInfo(createFormValidInfo(false));
+            setFormEntity(getExmplEntity());
         } else {
             getEntityById(id)
                 .then(u => {
@@ -48,11 +81,11 @@ export default function Form (props) {
         let formValid = true;
 
         Object.entries(newFormValidationInfo).map(prop => {
-            if(!prop[1].valid)
+            if(!prop[1].valid && prop[0] !== 'form')
             {
                 formValid = false;
             }
-            return {}
+            return ''
         })
 
         newFormValidationInfo.form = {
@@ -86,16 +119,16 @@ export default function Form (props) {
             <div className="form-row">
                 {
                     Object.keys(formEntity).map(attr => {
-                        if(attr === '_id') return {}
+                        if(attr === '_id')  return ''
                         return <div className="col">
                             <TextInputWithValidation
-                            formObject={formEntity}
-                            objectKey={attr}
-                            label={attr}
-                            placeholder={attr}
-                            type={attr === 'password' ? 'password' : 'text'}
-                            formValidationInfo={formValidationInfo}
-                            onChange={onChange}
+                                formObject={formEntity}
+                                objectKey={attr}
+                                label={attr}
+                                placeholder={attr}
+                                type={attr === 'password' ? 'password' : 'text'}
+                                formValidationInfo={formValidationInfo}
+                                onChange={onChange}
                             ></TextInputWithValidation>
                         </div>
                     })
@@ -105,11 +138,11 @@ export default function Form (props) {
             {
                 formMode === 1 && 
                 <button 
-                type="button" 
-                className="btn btn-primary"
-                onClick={() => { submitForm(true) }}
-                disabled={!formValidationInfo["form"]?.valid}>
-                Create
+                    type="button" 
+                    className="btn btn-primary"
+                    onClick={() => { submitForm(true) }}
+                    disabled={!formValidationInfo["form"]?.valid}>
+                    Create
                 </button>
             }
             {
