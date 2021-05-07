@@ -17,6 +17,7 @@ function DataInput() {
         customer: customers[0] || '',
         products: []
     });
+    const [formular, setFormular] = useState();
 
     useEffect(() => {    
         try {                           
@@ -78,10 +79,17 @@ function DataInput() {
 
     function addProduct() {
         setSelectedInput({...selectedInput, 'products': [...selectedInput.products, currProduct]})
-        setCurrProduct({})
     }
 
     function submit() {
+        collectionConfirmationService.getFormular(selectedInput)
+            .then(data => {
+                console.log(data);
+                setFormular(data);
+            })
+            .catch(err => {
+                toast.error(err);
+            })
     }
 
     return (
@@ -127,9 +135,11 @@ function DataInput() {
                 </button>
                 <button 
                     type="submit" 
-                    class="btn btn-primary">
+                    class="btn btn-primary"
+                    onClick={submit}>
                     Submit
                 </button>
+                <div dangerouslySetInnerHTML={{ __html: formular }} />
                 <br/>
             </div>
         </div>
