@@ -92,6 +92,16 @@ function DataInput() {
             })
     }
 
+    function save() {
+        collectionConfirmationService.create(selectedInput)
+            .then(data => {
+                console.log(data);
+            })
+            .catch(err => {
+                toast.error(err);
+            })
+    }
+
     return (
         <div>
             <div style={{textAlign: "center"}}>
@@ -140,6 +150,12 @@ function DataInput() {
                     Submit
                 </button>
                 <div dangerouslySetInnerHTML={{ __html: formular }} />
+                <button 
+                    type="submit" 
+                    class="btn btn-primary"
+                    onClick={save}>
+                    Speichern
+                </button>
                 <br/>
             </div>
         </div>
