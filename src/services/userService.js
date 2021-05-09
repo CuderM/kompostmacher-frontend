@@ -10,6 +10,7 @@ export const userService = {
   delete: _delete,
   login, 
   logout,
+  createSubUser,
 };
 
 function login(credentials) {
@@ -31,6 +32,11 @@ function getById(id) {
 function create(user) {
   delete user.confirmedPassword;
   return authService.post(baseUrl + '/register', user);
+}
+
+function createSubUser(user) {
+  delete user.confirmedPassword;
+  return authService.post(baseUrl + '/registerSubUser', user);
 }
 
 function update(id, user) {

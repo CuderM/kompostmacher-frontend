@@ -13,22 +13,22 @@ import { toast } from 'react-toastify';
 const Login = ({ setUserStatus }) => {
     let formValidationInfoDEMO = {
         'username': {
-            valid: false,
+            valid: true,
             msg: ''
         },
         'form': {
-            valid: false,
+            valid: true,
             msg: ''
         },
         'password': {
-            valid: false,
+            valid: true,
             msg: ''
         }
     }
 
     const [formUser, setFormUser] = useState({
-        'username': '',
-        'password': '',
+        'username': 'Poizen159',
+        'password': '123123',
         'type': 'session'
     });
     const [formValidationInfo, setFormValidationInfo] = useState(formValidationInfoDEMO);
@@ -40,17 +40,17 @@ const Login = ({ setUserStatus }) => {
         /*sha256(user.password)
         user.password = sha256.create();*/
 
-        const token = userService.login(user)
+        userService.login(user)
             .then(data => { 
-                console.log(data); 
+                console.log(data);
+                localStorage.setItem('id', data.uid)
+                localStorage.setItem('isAdmin', data.isAdmin)
                 setUserStatus(user);
             })
             .catch(err => {
                 toast.error('Wrong email or password');
             }
         );
-
-        console.warn(token);
     }
 
     function toSignUp() {

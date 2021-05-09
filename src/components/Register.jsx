@@ -42,6 +42,7 @@ const Signup = ({ setUserStatus }) => {
 
     const submit = async e => {
         let user = formUser;
+        user.admin = true;
 
         const token = userService.create(user)
             .then(data => {

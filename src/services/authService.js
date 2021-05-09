@@ -52,6 +52,6 @@ function combineHeadersWithAuthInfo(headers) {
 }
 
 function getAuthInfo() {
-  //not implemented yet
-  return ;
+  let auth = localStorage.getItem('id');
+  return auth || '';
 }

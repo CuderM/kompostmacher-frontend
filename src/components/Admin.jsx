@@ -94,7 +94,7 @@ export default function Admin() {
                         }
                     },
                     userService.getById,
-                    userService.create,
+                    userService.createSubUser,
                     userService.update,
                     (name, value, formValidInfo) => {
                         let validationInfo;

@@ -103,6 +103,7 @@ export default function Form () {
     }
 
     const submitForm = (create) => { 
+        formEntity.userId = localStorage.getItem('id');
         if(create) {
             entityCreate(formEntity)
                 .then(() => history.push('/admin'))

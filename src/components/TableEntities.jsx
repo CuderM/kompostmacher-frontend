@@ -30,7 +30,7 @@ export default function TableEntities(props) {
                         <tr key={ent._id}>
                             { delete ent.password }
                             {   Object.keys(ent).map(attr => {
-                                    if(attr !== '_id') {
+                                    if(attr !== '_id' && attr !== 'userId' && attr !== 'adminId' && attr !== 'admin') {
                                         var value = ent[attr];
                                         return <td onClick={() => openForm(formUrl + ent._id, entity)}>{value}</td>
                                     }

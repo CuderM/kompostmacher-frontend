@@ -1,23 +1,29 @@
 import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { productService } from '../services/productService';
 import { customerService } from '../services/customerService';
+import { parseHTMLFormular } from '../services/parseHTMLFormular';
 
-import CreatePDF from './PDFCreator';
+import head from '../pics/KompostmacherAnschrift.jpg';
+import DOMPurify from 'dompurify'
+
 import { collectionConfirmationService } from '../services/collectionConfirmationService';
 
 function DataInput() {
-    const history = useHistory();
     const [customers, setCustomers] = useState([]);
     const [products, setProducts] = useState([]);
     const [currProduct, setCurrProduct] = useState({});
+    const [subCustomer, setSubCustomer] = useState('');
     const [selectedInput, setSelectedInput] = useState({
         customer: customers[0] || '',
-        products: []
+        products: [],
+        subCustomer: subCustomer || ''
     });
-    const [formular, setFormular] = useState();
+    const [htmlFormular, setHTMLFormular] = useState();
+    
+    const [handSign, setHandSign] = useState();
+    const [notMet, setNotMet] = useState();
 
     useEffect(() => {    
         try {                           
@@ -68,6 +74,10 @@ function DataInput() {
                 case 'amount':
                     setCurrProduct({...currProduct, 'amount': value})
                     break;
+                case 'subcustomer':
+                    setSubCustomer(value);
+                    setSelectedInput({...selectedInput, 'subCustomer': value});
+                    break;
                 default:
                     toast.error('something went wrong!');
             }
@@ -77,6 +87,21 @@ function DataInput() {
         }
     }
 
+    const replacements = [
+        {
+            placeholder: '#unterschrift',
+            replacement: '<input onChange={onChange}></input>'
+        },
+        {
+            placeholder: '#niemandenangetroffen',
+            replacement: '<input onChange={onChange} type="checkbox"/>Niemanden Angetroffen'
+        },
+        {
+            placeholder: '#head',
+            replacement: head
+        }
+    ]
+
     function addProduct() {
         setSelectedInput({...selectedInput, 'products': [...selectedInput.products, currProduct]})
     }
@@ -85,7 +110,8 @@ function DataInput() {
         collectionConfirmationService.getFormular(selectedInput)
             .then(data => {
                 console.log(data);
-                setFormular(data);
+                data = parseHTMLFormular(data, replacements);
+                setHTMLFormular(data);
             })
             .catch(err => {
                 toast.error(err);
@@ -96,6 +122,7 @@ function DataInput() {
         collectionConfirmationService.create(selectedInput)
             .then(data => {
                 console.log(data);
+                toast.info(data)
             })
             .catch(err => {
                 toast.error(err);
@@ -115,6 +142,16 @@ function DataInput() {
                         })
                     }
                 </select>
+                <br/>
+                <input 
+                    type="text" 
+                    id="inputSubcustomer" 
+                    placeholder="Subkunde"
+                    key='subcustomer'
+                    name="subcustomer" 
+                    onChange={onChange}
+                >
+                </input>
                 <br/>
                 <select 
                     key="product"
@@ -149,7 +186,8 @@ function DataInput() {
                     onClick={submit}>
                     Submit
                 </button>
-                <div dangerouslySetInnerHTML={{ __html: formular }} />
+                <br/>
+                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(htmlFormular) }} />
                 <button 
                     type="submit" 
                     class="btn btn-primary"
