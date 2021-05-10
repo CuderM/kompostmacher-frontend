@@ -119,7 +119,7 @@ function DataInput() {
     }
 
     function save() {
-        collectionConfirmationService.create(selectedInput)
+        collectionConfirmationService.saveFormular({ formular: htmlFormular })
             .then(data => {
                 console.log(data);
                 toast.info(data)

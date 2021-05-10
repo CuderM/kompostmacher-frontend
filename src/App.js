@@ -22,8 +22,7 @@ function App() {
   const [userStatus, setUserStatus] = useState("login");
 
   let navItems = [
-    { title: 'Admin', to: '/admin', component: Admin, icon: "bi bi-list" },
-    { title: 'WorkingPage', to: '/workingpage', component: WorkingPage, icon: "bi bi-list" },
+    { title: 'WorkingPage', to: '/workingpage', component: WorkingPage, icon: "bi bi-list" }
   ];
 
   let otherRoutes = [
@@ -36,15 +35,19 @@ function App() {
     { to: '/signup', component: () => <Signup setUserStatus={setUserStatus}/> },
   ]
 
-
-  if (userStatus === 'login') {
-    return <div className="form-wrapper">
-      <BrowserRouter>
-        <ToastContainer />
-        <MySwitch otherRoutes={authenticationRoutes} redirect={"/login"}></MySwitch>
-      </BrowserRouter>
-    </div>
+  if(localStorage.getItem('id') === null) {
+    if (userStatus === 'login') {
+      return <div className="form-wrapper">
+        <BrowserRouter>
+          <ToastContainer />
+          <MySwitch otherRoutes={authenticationRoutes} redirect={"/login"}></MySwitch>
+        </BrowserRouter>
+      </div>
+    }
   }
+  
+
+  if(localStorage.getItem('isAdmin') === 'true') navItems.push({ title: 'Admin', to: '/admin', component: Admin, icon: "bi bi-list" })
 
   return (
     <BrowserRouter>
@@ -54,7 +57,7 @@ function App() {
           <MyNavbar navItems={navItems}></MyNavbar>
         </div>
         <div className="content-wrapper">
-          <MySwitch navItems={navItems} otherRoutes={otherRoutes} redirect={"/admin"}></MySwitch>
+          <MySwitch navItems={navItems} otherRoutes={otherRoutes} redirect={"/workingpage"}></MySwitch>
         </div>
       </div>
     </BrowserRouter>

@@ -52,8 +52,7 @@ const Signup = ({ setUserStatus }) => {
             })
             .catch(err => {
                 toast.error(err.message);
-            }
-            );
+            });
         
         console.log(token);
     }
