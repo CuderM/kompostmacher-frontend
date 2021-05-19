@@ -8,6 +8,8 @@ import { parseHTMLFormular } from '../services/parseHTMLFormular';
 import head from '../pics/KompostmacherAnschrift.jpg';
 import DOMPurify from 'dompurify'
 
+import '../style/Abholbestaetigung.css';
+
 import { collectionConfirmationService } from '../services/collectionConfirmationService';
 
 function DataInput() {
@@ -20,11 +22,10 @@ function DataInput() {
         products: [],
         subCustomer: subCustomer || ''
     });
-    const [htmlFormular, setHTMLFormular] = useState();
+    const [isChecked, setIsChecked] = useState('');
+    const [htmlFormular, setHTMLFormular] = useState('');
+    const [displaySign, setDisplaySign] = useState('none');
     
-    const [handSign, setHandSign] = useState();
-    const [notMet, setNotMet] = useState();
-
     useEffect(() => {    
         try {                           
             customerService.getAll()
@@ -78,6 +79,10 @@ function DataInput() {
                     setSubCustomer(value);
                     setSelectedInput({...selectedInput, 'subCustomer': value});
                     break;
+                case 'sign':
+                    if(isChecked === '') setIsChecked('checked')
+                    else setIsChecked('')
+                    break;
                 default:
                     toast.error('something went wrong!');
             }
@@ -88,19 +93,28 @@ function DataInput() {
     }
 
     const replacements = [
+        // {
+        //     placeholder: '#unterschrift',
+        //     replacement: '<input onChange={onChange}></input>'
+        // },
+        // {
+        //     placeholder: '#niemandenangetroffen',
+        //     replacement: '<input onChange={onChange} type="checkbox" checked="true" />Niemanden Angetroffen'
+        // },
+        // {
+        //     placeholder: '<div id="bestaetigung">Die Übernahme der angegebenen Menge wurde vom entsprechenden Zuständigen bestätigt #niemandenangetroffen</div>',
+        //     replacement: '<div id="bestaetigung">Die Übernahme der angegebenen Menge wurde vom entsprechenden Zuständigen bestätigt #niemandenangetroffen</div>'
+        // },
         {
-            placeholder: '#unterschrift',
-            replacement: '<input onChange={onChange}></input>'
-        },
-        {
-            placeholder: '#niemandenangetroffen',
-            replacement: '<input onChange={onChange} type="checkbox"/>Niemanden Angetroffen'
-        },
-        {
-            placeholder: '#head',
+            placeholder: '#PARSE_head',
             replacement: head
         }
-    ]
+    ];
+
+    function addSignToHTML(html, addition) {
+        html = html.replace('<div style="display: none">sign<div/>', addition);
+        return html;
+    }
 
     function addProduct() {
         setSelectedInput({...selectedInput, 'products': [...selectedInput.products, currProduct]})
@@ -111,6 +125,7 @@ function DataInput() {
             .then(data => {
                 console.log(data);
                 data = parseHTMLFormular(data, replacements);
+                setDisplaySign('inline');
                 setHTMLFormular(data);
             })
             .catch(err => {
@@ -119,7 +134,7 @@ function DataInput() {
     }
 
     function save() {
-        collectionConfirmationService.saveFormular({ formular: htmlFormular })
+        collectionConfirmationService.create({ htmlFormular: addSignToHTML(htmlFormular, `<div id="footer" style="display: ${displaySign}"><div id="unterschriftwrapper"><div id="unterschrift">Unterschrift Kunde: ____________________________________</div></div></div><div style="display: ${displaySign}" id="bestaetigung">Die Übernahme der angegebenen Menge wurde vom entsprechenden Zuständigen bestätigt <div style="display: ${displaySign}"><input name="sign" type="checkbox" ${isChecked} />Niemanden Angetroffen</div></div>`) })
             .then(data => {
                 console.log(data);
                 toast.info(data)
@@ -188,6 +203,15 @@ function DataInput() {
                 </button>
                 <br/>
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(htmlFormular) }} />
+                {/*<div style={{display: displaySign}}><input onChange={onChange} name="sign" type="checkbox" checked={isChecked} />Niemanden Angetroffen</div>*/}
+                <br/>
+                <div id="footer" style={{display: displaySign}}>
+                    <div id="unterschriftwrapper">
+                        <div id="unterschrift">Unterschrift Kunde: ____________________________________</div>
+                    </div>
+                </div>
+                <div style={{display: displaySign}} id="bestaetigung">Die Übernahme der angegebenen Menge wurde vom entsprechenden Zuständigen bestätigt <div style={{display: displaySign}}><input onChange={onChange} name="sign" type="checkbox"/>Niemanden Angetroffen</div></div>
+                <br/>
                 <button 
                     type="submit" 
                     class="btn btn-primary"

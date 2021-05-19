@@ -1,0 +1,131 @@
+html {
+    background-color: black;
+}
+
+#body { 
+    height:297mm; 
+    width:210mm; 
+    margin-left:auto; 
+    margin-right:auto; 
+    background-color: white;
+}
+
+#wrapper {
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 40px;
+}
+
+#headerwrapper {
+    display: inline-block;
+}
+
+#headerdesc {
+    display: inline-block;
+    font-size: 40px;
+    font-weight: bold;
+    border-bottom: 1px solid;
+}
+
+#description {
+    display: inline-block;
+}
+
+#informations {
+    margin-top: 5px;
+    margin-left: 88px;
+    display: grid;
+    grid-template-columns: 150px 150px;
+    grid-template-rows: 15px 15px 15px;
+    gap: 0px 0px;
+    grid-template-areas:
+      ". ."
+      ". ."
+      ". .";
+}
+
+#name, #iban, #address, #tel, #plz, #email {
+    display: inline-block;
+    font-size: 10px;
+}
+
+#customerinformations{
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    grid-template-rows: 80px;
+    gap: 0px 0px;
+    grid-template-areas:
+        ". . .";
+}
+
+#datum {
+    justify-self: right;
+}
+
+#customeraddresses {
+    display: grid;
+    grid-template-columns: 200px ;
+    grid-template-rows: 20px 10px 10px 10px 10px;
+    gap: 0px 0px;
+    grid-template-areas:
+        ".",        
+        ".",        
+        ".";
+}
+
+#can{
+    text-decoration: underline;
+}
+
+#main {
+    padding-top: 20px;
+}
+
+#ueschein {
+    font-weight: bold;
+}
+
+#uescheincontent {
+    display: inline;
+}
+
+#maincontent {
+    margin-top: 20px;
+    width: 100%;
+}
+
+#maincontent, #maincontent th, #maincontent td {
+    border: 1px solid;
+    border-collapse: collapse;
+    padding: 3px;
+}
+
+#maincontent th {
+    text-align: left;
+    background:lightgray;
+}
+
+#maincontent td {
+    height: 30px;
+}
+
+#footer {
+    margin-top: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid
+}
+
+#unterschriftwrapper {
+    display: block;
+    background-color: lightgray;
+    padding: 5px;
+    font-weight: bold;
+    text-align: right;
+}
+
+#bestaetigung {
+    padding-top: 5px;
+    text-align:center;
+    font-size: 15px;
+}

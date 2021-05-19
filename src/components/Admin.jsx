@@ -49,10 +49,9 @@ export default function Admin() {
             collectionConfirmationService.getAll()
                 .then(_collectionConfirmation => {
                     console.log(_collectionConfirmation)
-                    _collectionConfirmation.forEach(cc => {
-                        cc.customer = cc.customer.name;
-                        cc.product = cc.product.name;
-                    });
+                    // _collectionConfirmation.forEach(cc => {
+                    //     cc.date = cc.customer.date;
+                    // });
                     setCollectionConfirmations(_collectionConfirmation);
                 })
                 .catch(err => {
@@ -225,6 +224,42 @@ export default function Admin() {
                     entity
                     );
                 break;
+            case 'Abholbestätigungen':
+                _openForm(
+                    url, 
+                    (valid) => {
+                        return {
+                            'form': {
+                                valid: valid,
+                                msg: ''
+                            }
+                        }
+                    },
+                    productService.getById,
+                    productService.create,
+                    productService.update,
+                    (name, value, formValidInfo) => {
+                        let validationInfo = {'valid': true, 'msg': 'ok' };
+                        
+                        /*
+                        switch(name) {
+                            case 'name':
+                                validationInfo = checkFirstname(value);
+                                break;
+                            case 'einheit':
+                                validationInfo = checkLastname(value);
+                                break;
+                            default:
+                        }*/
+                
+                        return {
+                            ...formValidInfo,
+                            [name]: validationInfo
+                        }
+                    },
+                    entity
+                    );
+                break;
                 default:
                 toast.error('something went wrong');
         }
@@ -239,6 +274,13 @@ export default function Admin() {
             entityUpdate: _entityUpdate,
             checkFields: _checkFields,
             entity: _entity
+        })
+    }
+
+    const showHTML = (_url, _collectionConfirmation) => {
+        history.push({
+            pathname: _url,
+            collectionConfirmation: _collectionConfirmation
         })
     }
 
@@ -411,20 +453,15 @@ export default function Admin() {
         <br/>,
         <TableEntities
             tableHeader={[
-                { key: 'customer', label: 'Kunde'},
-                { key: 'subcustomer', label: 'Subkunde'},
-                { key: 'product', label: 'Produkt'},
-                { key: 'amount', label: 'Menge'},
-                { key: 'date', label: 'Datum'},
-                { key: 'handsign', label: 'Unterschrift'}
+                { key: 'date', label: 'Datum'}
             ]}
-            openForm={openForm}
+            openForm={showHTML}
             _delete={_deleteCC}
             sortBy={sortBy}
             getSortSymbol={getSortSymbol}
             entities={collectionConfirmations}
             entity='Abholbestätigungen'
-            formUrl='/SimpleForm/'
+            formUrl='/showHTML/'
         ></TableEntities>
     ]
 }

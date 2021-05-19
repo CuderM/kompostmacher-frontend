@@ -120,7 +120,7 @@ export default function Form () {
             <div className="form-row">
                 {
                     Object.keys(formEntity).map(attr => {
-                        if(attr === '_id' || attr === 'admin')  return ''
+                        if(attr === '_id' || attr === 'admin' || attr === 'userId')  return ''
                         return <div className="col">
                             <TextInputWithValidation
                                 formObject={formEntity}
