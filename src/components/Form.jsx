@@ -34,7 +34,9 @@ export default function Form () {
             case 'Produkte':
                 ent = {
                     name: '',
-                    einheit: ''
+                    einheit: '',
+                    spezifikation: '',
+                    schluesselnummer: ''
                 }
                 break;
             case 'Kunden':

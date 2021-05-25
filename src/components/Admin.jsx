@@ -193,6 +193,14 @@ export default function Admin() {
                                 valid: valid,
                                 msg: ''
                             },
+                            'spezifikation': {
+                                valid: valid,
+                                msg: ''
+                            },
+                            'schluesselnummer': {
+                                valid: valid,
+                                msg: ''
+                            },
                             'form': {
                                 valid: valid,
                                 msg: ''
@@ -278,6 +286,7 @@ export default function Admin() {
     }
 
     const showHTML = (_url, _collectionConfirmation) => {
+        window.open('C:\Users\poize\Desktop\NeuesTextdokument(2).html')
         history.push({
             pathname: _url,
             collectionConfirmation: _collectionConfirmation
@@ -425,7 +434,9 @@ export default function Admin() {
         <TableEntities
             tableHeader={[
                 { key: 'name', label: 'Name'},
-                { key: 'einheit', label: 'Einheit'}
+                { key: 'einheit', label: 'Einheit'},
+                { key: 'spezifikation', label: 'Spezifikation'},
+                { key: 'schluesselnummer', label: 'Schluesselnummer'}
             ]}
             openForm={openForm}
             _delete={_deleteProduct}
