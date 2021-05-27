@@ -248,18 +248,6 @@ export default function Admin() {
                     productService.update,
                     (name, value, formValidInfo) => {
                         let validationInfo = {'valid': true, 'msg': 'ok' };
-                        
-                        /*
-                        switch(name) {
-                            case 'name':
-                                validationInfo = checkFirstname(value);
-                                break;
-                            case 'einheit':
-                                validationInfo = checkLastname(value);
-                                break;
-                            default:
-                        }*/
-                
                         return {
                             ...formValidInfo,
                             [name]: validationInfo

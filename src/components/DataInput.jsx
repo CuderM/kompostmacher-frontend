@@ -32,6 +32,7 @@ function DataInput() {
                 .then(_customers => {
                     console.log(_customers)
                     setCustomers(_customers);
+                    if(_customers.length > 0) setSelectedInput({...selectedInput, 'customer':  _customers[0]});
                 })
                 .catch(() => {
                     toast.error('Failed to load periods');
@@ -40,6 +41,7 @@ function DataInput() {
                 .then(_products => {
                     console.log(_products)
                     setProducts(_products);
+                    if(_products.length > 0) setCurrProduct({...currProduct, 'product': _products[0]})
                 })
                 .catch(() => {
                     toast.error('Failed to load periods');
@@ -107,7 +109,7 @@ function DataInput() {
         // },
         {
             placeholder: '#PARSE_head',
-            replacement: head
+            replacement: '../pics/KompostmacherAnschrift.jpg'//head
         }
     ];
 

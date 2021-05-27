@@ -25,7 +25,7 @@ export default function TableEntities(props) {
                         )}
                     </tr>
                 </thead>
-                <tbody>
+                <tbody style={{color:'white'}}>
                     {entities && entities.map((ent) => 
                         <tr key={ent._id}>
                             { delete ent.password }

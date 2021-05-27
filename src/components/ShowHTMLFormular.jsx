@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams} from 'react-router-dom';
+import { useParams, useHistory} from 'react-router-dom';
 import { toast } from 'react-toastify';
 import DOMPurify from 'dompurify'
 import { collectionConfirmationService } from '../services/collectionConfirmationService';
@@ -7,6 +7,7 @@ import { collectionConfirmationService } from '../services/collectionConfirmatio
 import '../style/Abholbestaetigung.css';
 
 const ShowHTMLFormular = () => {
+    const history = useHistory();
     let { id } = useParams();
     const [ html, setHTML ] = useState('nothing to show');
 
@@ -15,7 +16,8 @@ const ShowHTMLFormular = () => {
             setHTML(data.htmlFormular);
         })
         .catch(err => {
-            toast.error('error while loading HTML -> ' + err);
+            if(id === 'new') history.push('/workingpage');
+            else toast.error('error while loading HTML -> ' + err);
         })
     return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />
 }
