@@ -2,6 +2,10 @@ import './style/App.css';
 
 import React, { useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { useContext } from 'react';
+
+import { AuthContext } from './services/AuthContext';
+import { authService } from './services/authService';
 
 import MyNavbar from './components/Navbar.jsx';
 import MySwitch from "./components/Switch.jsx"
@@ -22,6 +26,10 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [userStatus, setUserStatus] = useState("login");
+  const { currentUser } = useContext(AuthContext);
+  let userAuthenticated = currentUser && currentUser._id;
+
+  if(!userAuthenticated) userAuthenticated = authService.getAuthInfo();
 
   let navItems = [
     { title: 'WorkingPage', to: '/workingpage', component: WorkingPage, icon: "bi bi-list" }
@@ -38,8 +46,8 @@ function App() {
     { to: '/signup', component: () => <Signup setUserStatus={setUserStatus}/> },
   ]
 
-  if(localStorage.getItem('id') === null) {
-    if (userStatus === 'login') {
+    
+    if(!userAuthenticated) {
       return <div className="form-wrapper">
         <BrowserRouter>
           <ToastContainer />
@@ -47,7 +55,6 @@ function App() {
         </BrowserRouter>
       </div>
     }
-  }
   
 
   if(localStorage.getItem('isAdmin') === 'true') navItems.push({ title: 'Admin', to: '/admin', component: Admin, icon: "bi bi-list" })

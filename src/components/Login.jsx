@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import TextInputWithValidation from './TextInputValidation';
 
 import '../style/Login.css';
-import { userService } from '../services/userService';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { AuthContext } from '../services/AuthContext';
 import { authService } from '../services/authService';
 
-const Login = ({ setUserStatus }) => {
+const Login = (props) => {
+    const { login } = useContext(AuthContext);
+    const history = useHistory();
     let formValidationInfoDEMO = {
         'username': {
             valid: true,
@@ -29,17 +31,23 @@ const Login = ({ setUserStatus }) => {
         'type': 'session'
     });
     const [formValidationInfo, setFormValidationInfo] = useState(formValidationInfoDEMO);
-    const history = useHistory();
 
-    const submit = async e => {
+    const submit = async () => {
         let user = formUser;
+        // try {
+        //     await login(user);
+        //     history.push('workingPage');
+        // } catch(err) {
+        //     toast.error(err.message + ' + Wrong email or Password');
+        // }
+        
 
         authService.login(user)
             .then(data => { 
                 console.log(data);
                 localStorage.setItem('id', data.user._id)
                 localStorage.setItem('isAdmin', data.user.admin)
-                setUserStatus(user);
+                history.push('/workingpage');
             })
             .catch(err => {
                 toast.error(err.message + ': Wrong email or password');

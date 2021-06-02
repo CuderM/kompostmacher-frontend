@@ -1,17 +1,15 @@
-// WRAPS the DataService
-// Add Authentication-Information to the Data-Service
-
 import { dataService } from './dataService';
-// const storageProvider = sessionStorage;
+
 const baseUrl = process.env.REACT_APP_BACKEND_URL;
-let storageProvider = sessionStorage;
-// Auth Info stored in Memory and in Storage - Provider (sessionstorage localstorage)
-// let _authInfo = null;
+const storageProvider = localStorage;
+let _authInfo = storageProvider.getItem('authData');
 
 export const authService = {
   login,
   logout,
   getCurrentUser,
+  getAuthInfo,
+  handleTimeOut,
   get,
   post,
   patch,
@@ -20,13 +18,8 @@ export const authService = {
 
 async function login(credentials) {
   let authTime;
-  if(credentials.keepLoggedIn) {
-    authTime = -1;
-    storageProvider = localStorage;
-  } else {
-    authTime = Date.now();
-    storageProvider = sessionStorage;
-  }
+  credentials.keepLoggedIn ? authTime = -1 : authTime = Date.now();
+  
   const credString = `${credentials.username}:${credentials.password}:${authTime}`;
   const encodedCredentials = Buffer.from(credString).toString('base64');
 
@@ -49,25 +42,25 @@ catch(err) {
 }
 
 async function logout() {
-try {
-  clearAuthInfo();
+  try {
+    clearAuthInfo();
 
-  await dataService.post(`${baseUrl}/logout`, '', {
-    'Content-Type': 'text/plain',
-    Authorization: getAuthInfo(),
-  });
+    await dataService.post(`${baseUrl}/logout`, '', {
+      'Content-Type': 'text/plain',
+      Authorization: getAuthInfo(),
+    });
 
-  clearAuthInfo();
+    clearAuthInfo();
 
-  return Promise.resolve();
+    return Promise.resolve();
+  }
+  catch(err) {
+    return Promise.reject(err);
+  }
 }
-catch(err) {
-  return Promise.reject(err);
-}
-}
 
-function getCurrentUser() {
-  return get(`${baseUrl}/api/v1/currentUser`);
+function getCurrentUser(useCacheIfAvailable) {
+  return get(`${baseUrl}/currentUser`, null, useCacheIfAvailable);
 }
 
 function get(url, headers) {
@@ -92,7 +85,15 @@ function combineHeadersWithAuthInfo(headers) {
 }
 
 function getAuthInfo() {
-  return storageProvider.getItem('authData');
+  if (_authInfo != null)
+    return _authInfo;
+  try {
+    _authInfo = storageProvider.getItem('authData');
+    _authInfo = JSON.parse(_authInfo);
+  } catch (ex) {
+    console.log(ex);
+  }
+  return _authInfo;
 }
 
 function storeAuthInfo(authInfo) {
@@ -101,4 +102,11 @@ function storeAuthInfo(authInfo) {
 
 function clearAuthInfo() {
   storageProvider.setItem('authData', null);
+}
+
+function handleTimeOut(err, fu) {
+  if(err.code === 401) {
+    clearAuthInfo();
+  }
+  fu(err);
 }

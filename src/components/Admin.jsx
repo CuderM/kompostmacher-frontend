@@ -8,6 +8,8 @@ import { productService } from '../services/productService';
 import { customerService } from '../services/customerService';
 import { collectionConfirmationService } from '../services/collectionConfirmationService';
 
+import { authService } from '../services/authService';
+
 import'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function Admin() {
@@ -27,8 +29,11 @@ export default function Admin() {
                     console.log(_customers)
                     setCustomers(_customers);
                 })
-                .catch(() => {
-                    toast.error('Failed to load periods');
+                .catch((err) => {
+                    authService.handleTimeOut(err, (err) => {
+                        history.push('login')
+                        toast.error(err + ' : Failed to load periods');
+                    });
                 });
             userService.getAll()
                 .then(_users => {
