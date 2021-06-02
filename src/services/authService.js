@@ -4,7 +4,7 @@
 import { dataService } from './dataService';
 // const storageProvider = sessionStorage;
 const baseUrl = process.env.REACT_APP_BACKEND_URL;
-
+let storageProvider = sessionStorage;
 // Auth Info stored in Memory and in Storage - Provider (sessionstorage localstorage)
 // let _authInfo = null;
 
@@ -18,12 +18,52 @@ export const authService = {
   delete: _delete,
 };
 
-async function login(url, credentials) {
-  return post(url, credentials);
+async function login(credentials) {
+  let authTime;
+  if(credentials.keepLoggedIn) {
+    authTime = -1;
+    storageProvider = localStorage;
+  } else {
+    authTime = Date.now();
+    storageProvider = sessionStorage;
+  }
+  const credString = `${credentials.username}:${credentials.password}:${authTime}`;
+  const encodedCredentials = Buffer.from(credString).toString('base64');
+
+try {
+  clearAuthInfo();
+
+  let retVal = await dataService.post(`${baseUrl}/login`, '', {
+    'Content-Type': 'text/plain',
+    Authorization: encodedCredentials,
+  });
+
+  storeAuthInfo(encodedCredentials);
+
+  return Promise.resolve(retVal);
+}
+catch(err) {
+  clearAuthInfo();
+  return Promise.reject(err);
+}
 }
 
-async function logout(url, credentials) {
-  return post(url, credentials);
+async function logout() {
+try {
+  clearAuthInfo();
+
+  await dataService.post(`${baseUrl}/logout`, '', {
+    'Content-Type': 'text/plain',
+    Authorization: getAuthInfo(),
+  });
+
+  clearAuthInfo();
+
+  return Promise.resolve();
+}
+catch(err) {
+  return Promise.reject(err);
+}
 }
 
 function getCurrentUser() {
@@ -52,6 +92,13 @@ function combineHeadersWithAuthInfo(headers) {
 }
 
 function getAuthInfo() {
-  let auth = localStorage.getItem('id');
-  return auth || '';
+  return storageProvider.getItem('authData');
+}
+
+function storeAuthInfo(authInfo) {
+  storageProvider.setItem('authData', authInfo);
+}
+
+function clearAuthInfo() {
+  storageProvider.setItem('authData', null);
 }

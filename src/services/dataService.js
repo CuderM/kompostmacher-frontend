@@ -9,15 +9,28 @@ export const dataService = {
   delete: _delete,
 };
 
-async function get(url, headers) {
+async function get(url, headers, useCacheIfAvailable) {
   const requestOptions = {
     method: 'GET',
     mode: 'cors',
     headers,
-    //credentials: 'include',
+    credentials: 'include',
   };
 
+  if(useCacheIfAvailable) {
+    requestOptions.headers['If-None-Match'] = sessionStorage.getItem(getCacheKey(url),);
+  }
+
   return await call(url, requestOptions);
+}
+
+
+function getCacheKey(url) {
+  return `${getCacheKeyPrefix()}${url}`;
+}
+
+export function getCacheKeyPrefix() {
+  return 'AppCache_';
 }
 
 async function post(url, body, headers) {
@@ -32,7 +45,7 @@ async function post(url, body, headers) {
     method: 'POST',
     mode: 'cors',
     headers: postHeaders,
-    //credentials: 'include',
+    credentials: 'include',
     body: payload,
   };
 
@@ -51,7 +64,7 @@ async function patch(url, body, headers) {
     method: 'PATCH',
     mode: 'cors',
     headers: patchHeaders,
-    //credentials: 'include',
+    credentials: 'include',
     body: payload,
   };
 
@@ -63,7 +76,7 @@ async function _delete(url, headers) {
     method: 'DELETE',
     mode: 'cors',
     headers,
-    //credentials: 'include',
+    credentials: 'include',
   };
 
   return await call(url, requestOptions);

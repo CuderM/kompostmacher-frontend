@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import TextInputWithValidation from './TextInputValidation';
-//import PropTypes from 'prop-types';
 
 import '../style/Login.css';
 import { userService } from '../services/userService';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
-// var sha256 = require('js-sha256');
-
+import { authService } from '../services/authService';
 
 const Login = ({ setUserStatus }) => {
     let formValidationInfoDEMO = {
@@ -35,20 +32,17 @@ const Login = ({ setUserStatus }) => {
     const history = useHistory();
 
     const submit = async e => {
-        //e.preventDefault(); //idk what it does, but it's in the tutorial
         let user = formUser;
-        /*sha256(user.password)
-        user.password = sha256.create();*/
 
-        userService.login(user)
+        authService.login(user)
             .then(data => { 
                 console.log(data);
-                localStorage.setItem('id', data.uid)
-                localStorage.setItem('isAdmin', data.isAdmin)
+                localStorage.setItem('id', data.user._id)
+                localStorage.setItem('isAdmin', data.user.admin)
                 setUserStatus(user);
             })
             .catch(err => {
-                toast.error('Wrong email or password');
+                toast.error(err.message + ': Wrong email or password');
             }
         );
     }
