@@ -66,7 +66,7 @@ export default function Admin() {
         catch(err) {
             toast.error(err);
         }
-    }, []);
+    });
 
     const openForm = (url, entity) => {
         switch(entity) {
@@ -279,7 +279,7 @@ export default function Admin() {
     }
 
     const showHTML = (_url, _collectionConfirmation) => {
-        window.open('C:\Users\poize\Desktop\NeuesTextdokument(2).html')
+        //window.open('C:\Users\poize\Desktop\NeuesTextdokument(2).html')
         history.push({
             pathname: _url,
             collectionConfirmation: _collectionConfirmation

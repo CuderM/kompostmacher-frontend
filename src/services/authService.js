@@ -2,13 +2,15 @@ import { dataService } from './dataService';
 
 const baseUrl = process.env.REACT_APP_BACKEND_URL;
 const storageProvider = localStorage;
-let _authInfo = storageProvider.getItem('authData');
+let authDataSP = storageProvider.getItem('authData')
+let _authInfo = authDataSP !== null ? Buffer.from(authDataSP, 'base64').toString('utf-8') : null
 
 export const authService = {
   login,
   logout,
   getCurrentUser,
   getAuthInfo,
+  clearAuthInfo,
   handleTimeOut,
   get,
   post,
@@ -89,7 +91,7 @@ function getAuthInfo() {
     return _authInfo;
   try {
     _authInfo = storageProvider.getItem('authData');
-    _authInfo = JSON.parse(_authInfo);
+    _authInfo = Buffer.from(_authInfo, 'base64').toString('utf-8');
   } catch (ex) {
     console.log(ex);
   }

@@ -23,7 +23,7 @@ const AuthProvider = ({ children }) => {
             startPolling();
 
         return cleanUp;
-    }, []);
+    });
 
     function startPolling() {
         pollingJob.current = setInterval(loadCurrentUser, pollingTimeout);

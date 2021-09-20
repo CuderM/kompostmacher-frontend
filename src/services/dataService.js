@@ -1,4 +1,5 @@
 import AppError from '../AppError';
+import { authService } from './authService';
 
 // CORS - Enabled
 // Parsing JSON
@@ -117,6 +118,8 @@ async function getBody(response) {
   if (response.ok === false) {
     throw new AppError(response.status, responseBody || response.statusText);
   }
+
+  authService.clearAuthInfo();
 
   return responseBody;
 }

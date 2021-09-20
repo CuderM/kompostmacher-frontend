@@ -1,77 +1,76 @@
 import './style/App.css';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { useContext } from 'react';
 
 import { AuthContext } from './services/AuthContext';
 import { authService } from './services/authService';
 
-import MyNavbar from './components/Navbar.jsx';
-import MySwitch from "./components/Switch.jsx"
+import MyNavbar from './components_old/Navbar.jsx';
+import MySwitch from "./components_old/Switch.jsx"
 
-import Signup from './components/Register';
-import Login from './components/Login';
-
-import WorkingPage from './components/WorkingPage';
-import Admin from './components/Admin';
-
-import SimpleForm from './components/SimpleForm';
-import Form from './components/Form';
-
-import ShowHTMLFormular from './components/ShowHTMLFormular';
+import { routeItems, routeItemsAdmin, routeItemsAuth } from './components/routes';
+import { navItems, navItemsAdmin, navItemsAuth } from './components/navItems';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const [userStatus, setUserStatus] = useState("login");
-  const { currentUser } = useContext(AuthContext);
-  let userAuthenticated = currentUser && currentUser._id;
+  const { currentUser }  = useContext(AuthContext);
+  const [ user, setUser ]  = useState(currentUser)
+  let redirect
+  let routes = []
+  let items = []
 
-  if(!userAuthenticated) userAuthenticated = authService.getAuthInfo();
-
-  let navItems = [
-    { title: 'WorkingPage', to: '/workingpage', component: WorkingPage, icon: "bi bi-list" }
-  ];
-
-  let otherRoutes = [
-    { title: 'SimpleForm', to:'/SimpleForm/:userId', component: SimpleForm, icon: "bi bi-list" },
-    { title: 'Form', to:'/form/:id', component: Form, icon: "bi bi-list" },
-    { title: 'ShowHTMLFormular', to:'/showHTML/:id', component: ShowHTMLFormular, icon: "bi bi-list" }
-  ];
-
-  let authenticationRoutes = [
-    { to: '/login', component: () => <Login setUserStatus={setUserStatus}/> },
-    { to: '/signup', component: () => <Signup setUserStatus={setUserStatus}/> },
-  ]
-
-    
-    if(!userAuthenticated) {
-      return <div className="form-wrapper">
-        <BrowserRouter>
-          <ToastContainer />
-          <MySwitch otherRoutes={authenticationRoutes} redirect={"/login"}></MySwitch>
-        </BrowserRouter>
-      </div>
+  useEffect(() => {    
+    try {      
+      async function as() {
+        try {
+          setUser(await authService.getCurrentUser(false).then(data => console.log('data ' + data)))
+        }
+        catch(err) {
+          console.log('this little nigga ' + err)
+        }
+      }                     
+      as()
+      console.log('user ' + user)
     }
-  
+    catch(err) {
+      console.log('dumb ass bitch: ' + err)
+    }
+});
 
-  if(localStorage.getItem('isAdmin') === 'true') navItems.push({ title: 'Admin', to: '/admin', component: Admin, icon: "bi bi-list" })
+  console.log('this my user: ' + user)
+
+  redirect = (user ? '/workingpage' : '/login')
+
+  if(!user) {
+    routes = routeItemsAuth
+    items = navItemsAuth
+  } else {
+    if(user.admin === true) {
+      routes = routeItems.concat(routeItemsAdmin);
+      items = navItems.concat(navItemsAdmin);
+    } else {
+      routes = routeItems
+      items = navItems
+    }
+  }
 
   return (
     <BrowserRouter>
       <ToastContainer />
       <div className="page-content-wrapper">
         <div className="sidebar-wrapper">
-          <MyNavbar navItems={navItems}></MyNavbar>
+          <MyNavbar navItems={items}></MyNavbar>
         </div>
         <div className="content-wrapper">
-          <MySwitch navItems={navItems} otherRoutes={otherRoutes} redirect={"/workingpage"}></MySwitch>
+          <MySwitch routes={routes} redirect={redirect}></MySwitch>
         </div>
       </div>
     </BrowserRouter>
-  );
+  )
 }
 
 export default App;

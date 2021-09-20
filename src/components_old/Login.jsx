@@ -8,8 +8,10 @@ import { AuthContext } from '../services/AuthContext';
 import { authService } from '../services/authService';
 
 const Login = (props) => {
-    const { login } = useContext(AuthContext);
+    const ctx = useContext(AuthContext);
+    console.log(ctx)
     const history = useHistory();
+
     let formValidationInfoDEMO = {
         'username': {
             valid: true,
@@ -30,19 +32,22 @@ const Login = (props) => {
         'password': '123123',
         'type': 'session'
     });
+
     const [formValidationInfo, setFormValidationInfo] = useState(formValidationInfoDEMO);
 
     const submit = async () => {
         let user = formUser;
-        // try {
-        //     await login(user);
-        //     history.push('workingPage');
-        // } catch(err) {
-        //     toast.error(err.message + ' + Wrong email or Password');
-        // }
-        
-
-        authService.login(user)
+        // login
+        //     .then(data => { 
+        //         console.log(data);
+        //         localStorage.setItem('id', data.user._id)
+        //         localStorage.setItem('isAdmin', data.user.admin)
+        //         history.push('/workingpage');
+        //     })
+        //     .catch(err => {
+        //         toast.error(err.message + ': Wrong email or password');
+        //     })
+        ctx.login(user)
             .then(data => { 
                 console.log(data);
                 localStorage.setItem('id', data.user._id)
@@ -50,6 +55,7 @@ const Login = (props) => {
                 history.push('/workingpage');
             })
             .catch(err => {
+                console.log(err)
                 toast.error(err.message + ': Wrong email or password');
             }
         );
@@ -163,9 +169,5 @@ const Login = (props) => {
         </div>
     )
 }
-
-// Login.propTypes = {
-//     setToken: PropTypes.func.isRequired
-// }
 
 export default Login;
