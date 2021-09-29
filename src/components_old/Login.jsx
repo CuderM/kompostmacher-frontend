@@ -4,12 +4,10 @@ import TextInputWithValidation from './TextInputValidation';
 import '../style/Login.css';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { AuthContext } from '../services/AuthContext';
 import { authService } from '../services/authService';
 
 const Login = (props) => {
-    const ctx = useContext(AuthContext);
-    console.log(ctx)
+    const { setState } = props;
     const history = useHistory();
 
     let formValidationInfoDEMO = {
@@ -37,19 +35,9 @@ const Login = (props) => {
 
     const submit = async () => {
         let user = formUser;
-        // login
-        //     .then(data => { 
-        //         console.log(data);
-        //         localStorage.setItem('id', data.user._id)
-        //         localStorage.setItem('isAdmin', data.user.admin)
-        //         history.push('/workingpage');
-        //     })
-        //     .catch(err => {
-        //         toast.error(err.message + ': Wrong email or password');
-        //     })
-        ctx.login(user)
-            .then(data => { 
-                console.log(data);
+        authService.login(user)
+            .then(data => {
+                setState(data.user)
                 localStorage.setItem('id', data.user._id)
                 localStorage.setItem('isAdmin', data.user.admin)
                 history.push('/workingpage');

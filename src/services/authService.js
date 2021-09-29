@@ -1,9 +1,9 @@
 import { dataService } from './dataService';
 
 const baseUrl = process.env.REACT_APP_BACKEND_URL;
-const storageProvider = localStorage;
+let storageProvider = localStorage;
 let authDataSP = storageProvider.getItem('authData')
-let _authInfo = authDataSP !== null ? Buffer.from(authDataSP, 'base64').toString('utf-8') : null
+let _authInfo = authDataSP// !== null ? Buffer.from(authDataSP, 'base64').toString('utf-8') : null
 
 export const authService = {
   login,
@@ -33,7 +33,7 @@ try {
     Authorization: encodedCredentials,
   });
 
-  storeAuthInfo(encodedCredentials);
+  storeAuthInfo(encodedCredentials, credentials.keepLoggedIn);
 
   return Promise.resolve(retVal);
 }
@@ -62,7 +62,9 @@ async function logout() {
 }
 
 function getCurrentUser(useCacheIfAvailable) {
-  return get(`${baseUrl}/currentUser`, null, useCacheIfAvailable);
+  //handle useCacheIfAvaiable
+
+  return get(`${baseUrl}/currentUser`, combineHeadersWithAuthInfo())
 }
 
 function get(url, headers) {
@@ -98,7 +100,8 @@ function getAuthInfo() {
   return _authInfo;
 }
 
-function storeAuthInfo(authInfo) {
+function storeAuthInfo(authInfo, keepLoggedIn) {
+  //keepLoggedIn ? storageProvider = localStorage : storageProvider = sessionStorage
   storageProvider.setItem('authData', authInfo);
 }
 

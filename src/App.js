@@ -10,7 +10,7 @@ import { authService } from './services/authService';
 import MyNavbar from './components_old/Navbar.jsx';
 import MySwitch from "./components_old/Switch.jsx"
 
-import { routeItems, routeItemsAdmin, routeItemsAuth } from './components/routes';
+import { Routes } from './components/routes';
 import { navItems, navItemsAdmin, navItemsAuth } from './components/navItems';
 
 import { ToastContainer } from 'react-toastify';
@@ -20,40 +20,34 @@ function App() {
   const { currentUser }  = useContext(AuthContext);
   const [ user, setUser ]  = useState(currentUser)
   let redirect
-  let routes = []
+
+  let routes = new Routes(setUser)
   let items = []
 
-  useEffect(() => {    
-    try {      
-      async function as() {
-        try {
-          setUser(await authService.getCurrentUser(false).then(data => console.log('data ' + data)))
-        }
-        catch(err) {
-          console.log('this little nigga ' + err)
-        }
-      }                     
-      as()
-      console.log('user ' + user)
-    }
-    catch(err) {
-      console.log('dumb ass bitch: ' + err)
-    }
+  useEffect(() => {     
+    async function as() {
+      try {
+        console.log(authService.getCurrentUser(true).then(data => setUser(data)).then(err => console.log('err ', err)))
+      }
+      catch(err) {
+        console.log('', err)
+      }
+    }                     
+    as()
+    console.log('user ' + user)
 });
 
-  console.log('this my user: ' + user)
-
-  redirect = (user ? '/workingpage' : '/login')
+  redirect = (user ? '/workingpage' : '/login') // : '/test')
 
   if(!user) {
-    routes = routeItemsAuth
+    routes = routes.getRouteItemsAuth()
     items = navItemsAuth
   } else {
     if(user.admin === true) {
-      routes = routeItems.concat(routeItemsAdmin);
+      routes = routes.getRouteItems().concat(routes.getRouteItemsAdmin());
       items = navItems.concat(navItemsAdmin);
     } else {
-      routes = routeItems
+      routes = routes.getRouteItems()
       items = navItems
     }
   }
