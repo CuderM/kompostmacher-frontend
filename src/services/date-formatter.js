@@ -17,7 +17,9 @@ function formatDate(date) {
   dateParts.push(('00' + d.getMilliseconds()).slice(-3));
 
   // join the parts into date (string) (and add the year)
-  return `${dateParts[0]}.${dateParts[1]}.${date.getFullYear()}`;
+  return `${dateParts[0]}.${dateParts[1]}.${date.getFullYear()} ${
+    dateParts[2]
+  }:${dateParts[3]}:${dateParts[4]} ${dateParts[5]}`;
 }
 
 export { formatDate };

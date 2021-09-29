@@ -1,0 +1,146 @@
+
+.App {
+  text-align: center;
+}
+
+body {
+  color: white;
+  background-image: linear-gradient(to bottom right, #142836, #469BF4);
+}
+
+.sidebar-wrapper{
+  min-height: 100vh !important;
+  margin-left: -1.3rem;
+  font-size: 25px;
+  grid-area: sidebar; 
+}
+
+.page-content-wrapper {
+  min-width: 0;
+  width: 100%;
+  color: white;
+  display: grid;
+    grid-template-areas:
+      'sidebar content';
+  grid-gap: 20px;
+  grid-template-columns: 1fr 7fr;
+}
+
+.grayback{
+  background-color: #0C0F1F;
+}
+
+.full{
+  height: 100%;
+}
+
+.icon{
+  font-size: 35px;
+}
+
+.form-wrapper{
+  min-height: 90vh !important;
+  margin-right: 25%;  
+  margin-left: 25%;  
+  margin-top: 10vh;
+  font-size: 25px;
+  color: white;
+}
+
+.content-wrapper{
+  padding: 20px !important;
+  height: 100%;
+  width: 100%;
+  grid-area: content;
+}
+
+.button{
+  border-radius: 10px;
+  border: none;
+  background-color: #2589f5;
+  color: white;
+}
+
+.button:disabled,
+.button[disabled]{
+  background-color: #888585;
+}
+
+.topRight{
+  position:relative;
+  top: 0;
+  margin: 13px;
+  float: right;
+}
+
+.bottomRight{
+  position:relative;
+  bottom: 0;
+  float: right;
+  margin: 13px;
+}
+
+.bottomLeft{
+  position: relative;
+  bottom: 0;
+  float: left;
+  margin: 13px;
+}
+
+.line{
+  size: "8"; 
+  width:90%; 
+  color:#D4D6DD;
+}
+
+@media screen and (max-width: 991px) {
+  .sidebar-wrapper {
+    min-height: 10px !important;
+    /* width: 100%; */
+    height: 100px;
+    margin-left: -1.3rem;
+    background-color: #0C0F1F;
+    /* padding-left: 20px; */
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+  }
+
+  .content-wrapper{
+    padding-top: 0px !important;
+  }
+
+  .navLink {
+    background: #0C0F1F;
+  }
+
+  .page-content-wrapper {
+    width: 100%;
+    min-height: 100vh;
+
+    display: grid;
+      grid-template-areas:
+        'sidebar'
+        'content';
+        grid-gap: 20px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 10fr;
+  }
+
+  .navbar-light .navbar-toggler {
+    border-color: white;
+  }
+
+  .sidebar {
+    right: 0 !important;
+    margin-right: 20px !important;
+    left: auto !important;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    /* left: 0; */
+    min-height: 100vh !important;
+    z-index: 100;
+    padding: 48px 0 0;
+  }
+}

@@ -5,9 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.css';
 
+import {ErrorBoundary} from './components_old/ErrorBoundry'
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+  <ErrorBoundary>
+  <App />
+  </ErrorBoundary>
+    
   </React.StrictMode>,
   document.getElementById('root')
 );

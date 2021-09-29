@@ -1,3 +1,8 @@
+import AppError from '../AppError';
+import { authService } from './authService';
+
+// CORS - Enabled
+// Parsing JSON
 export const dataService = {
   get,
   post,
@@ -5,50 +10,128 @@ export const dataService = {
   delete: _delete,
 };
 
-function get(url) {
+async function get(url, headers, useCacheIfAvailable) {
   const requestOptions = {
     method: 'GET',
+    mode: 'cors',
+    headers,
+    credentials: 'include',
   };
-  return fetch(url, requestOptions).then(handleResponse);
+
+  // if(useCacheIfAvailable) {
+  //   requestOptions.headers['If-None-Match'] = sessionStorage.getItem(getCacheKey(url),);
+  // }
+
+  return await call(url, requestOptions);
 }
 
-function post(url, body) {
+
+function getCacheKey(url) {
+  return `${getCacheKeyPrefix()}${url}`;
+}
+
+export function getCacheKeyPrefix() {
+  return 'AppCache_';
+}
+
+async function post(url, body, headers) {
+  let postHeaders = {
+    'Content-Type': 'application/json',
+  };
+
+  postHeaders = { ...postHeaders, ...headers };
+  const payload = serializePayload(body, postHeaders);
+
   const requestOptions = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+    mode: 'cors',
+    headers: postHeaders,
+    credentials: 'include',
+    body: payload,
   };
-  return fetch(url, requestOptions).then(handleResponse);
+
+  return await call(url, requestOptions);
 }
 
-function patch(url, body) {
+async function patch(url, body, headers) {
+  let patchHeaders = {
+    'Content-Type': 'application/json',
+  };
+
+  patchHeaders = { ...patchHeaders, ...headers };
+  const payload = serializePayload(body, patchHeaders);
+
   const requestOptions = {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+    mode: 'cors',
+    headers: patchHeaders,
+    credentials: 'include',
+    body: payload,
   };
-  return fetch(url, requestOptions).then(handleResponse);
+
+  return await call(url, requestOptions);
 }
 
-// prefixed with underscored because delete is a reserved word in javascript
-function _delete(url) {
+async function _delete(url, headers) {
   const requestOptions = {
     method: 'DELETE',
+    mode: 'cors',
+    headers,
+    credentials: 'include',
   };
-  return fetch(url, requestOptions).then(handleResponse);
+
+  return await call(url, requestOptions);
 }
 
-// helper functions
-// improve: eventhandler here
-function handleResponse(response) {
-  return response.text().then((text) => {
-    const data = text && JSON.parse(text);
+function serializePayload(payload, headers) {
+  if (headers['Content-Type'] === 'application/json') {
+    if (payload === undefined) payload = {};
+    return JSON.stringify(payload);
+  }
+  return payload;
+}
 
-    if (!response.ok) {
-      const error = (data && data.message) || response.statusText;
-      return Promise.reject(error);
+async function call(url, requestOptions) {
+  let response = null;
+  let body = null;
+  console.log(url);
+  response = await fetch(url, requestOptions);
+  body = await getBody(response);
+
+  return body;
+}
+
+async function getBody(response) {
+  let responseBody = null;
+  try {
+    if (isJSON(response)) {
+      responseBody = await response.json();
+    } else {
+      responseBody = await response.text();
     }
+  } catch (err) {
+    // check error-information here and rethrow it as app-error
+    console.error(err);
+    throw new AppError(response.status, responseBody || response.statusText);
+  }
 
-    return data;
-  });
+  if (response.ok === false) {
+    //console.log(response.status, responseBody || response.statusText);
+    throw new Error(response.status, responseBody || response.statusText);
+  }
+
+  
+
+  return responseBody;
+}
+
+function isJSON(response) {
+  let contentTypeHeader =
+    response.headers &&
+    (response.headers['content-type'] || response.headers.get('content-type'));
+
+  return (
+    contentTypeHeader &&
+    contentTypeHeader.toLowerCase().includes('application/json')
+  );
 }

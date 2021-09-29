@@ -1,4 +1,4 @@
-import { formatDate } from './date-formatter';
+import { formatDate } from '../services/date-formatter.js';
 import head from '../pics/KompostmacherAnschrift.jpg';
 
 const createPDF = props => {
@@ -46,7 +46,8 @@ const createPDF = props => {
             </table>
             <br/>
             <div style={{textAlign: "center"}}>
-                <p>Unterschrift Kunde:<input></input></p>
+                <p>Unterschrift Kunde:
+                <input></input></p>
                 <input type="checkbox"/>Niemanden Angetroffen
             </div>
         </div>

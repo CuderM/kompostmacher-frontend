@@ -1,30 +1,73 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import './App.css';
-import React, { useState} from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
-import'bootstrap-icons/font/bootstrap-icons.css'; 
+import './style/App.css';
 
-import MyNavbar from './routes/MyNavbar';
-import Admin from './routes/Admin';
-import WorkingPage from './routes/WorkingPage';
-import Login from './routes/Login';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { useContext } from 'react';
 
-import { configureFakeBackend } from './services/fakeBackend.js';
+import { AuthContext } from './services/AuthContext';
+import { authService } from './services/authService';
 
-import createPDF from './components/PDFCreator';
+import MyNavbar from './components_old/Navbar.jsx';
+import MySwitch from "./components_old/Switch.jsx"
 
-configureFakeBackend();
+import { Routes } from './components/routes';
+import { navItems, navItemsAdmin, navItemsAuth } from './components/navItems';
 
-function App() {
-  const [active, setActive] = useState("Login");
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+function App(props) {
+  let { isError } = props
+  const { currentUser }  = useContext(AuthContext);
+  const [ user, setUser ]  = useState(currentUser)
+  let redirect
+
+  let routes = new Routes(setUser)
+  let items = []
+
+  useEffect(() => {     
+    async function as() {
+      try {
+        console.log(authService.getCurrentUser(true).then(data => setUser(data)).then(err => { isError = true; console.log('err ', err) }))
+      }
+      catch(err) {
+        isError = true;
+        console.log('', err)
+      }
+    }         
+    if(!isError)  as()
+    console.log('isError: ', isError)
+    console.log('user ' + user)
+});
+
+  redirect = (user ? '/workingpage' : '/login') // : '/test')
+
+  if(!user) {
+    routes = routes.getRouteItemsAuth()
+    items = navItemsAuth
+  } else {
+    if(user.admin === true) {
+      routes = routes.getRouteItems().concat(routes.getRouteItemsAdmin());
+      items = navItems.concat(navItemsAdmin);
+    } else {
+      routes = routes.getRouteItems()
+      items = navItems
+    }
+  }
 
   return (
-    <div>
-      {active === "Login" && <Login></Login>}
-      {active === "Admin" && <Admin></Admin>}
-      {active === "WorkingPage" && <WorkingPage></WorkingPage>}
-    </div>
-  );
+    <BrowserRouter>
+      <ToastContainer />
+      <div className="page-content-wrapper">
+        <div className="sidebar-wrapper">
+          <MyNavbar navItems={items}></MyNavbar>
+        </div>
+        <div className="content-wrapper">
+          <MySwitch routes={routes} redirect={redirect}></MySwitch>
+        </div>
+      </div>
+    </BrowserRouter>
+  )
 }
 
 export default App;
