@@ -34,8 +34,8 @@ function DataInput() {
                     setCustomers(_customers);
                     if(_customers.length > 0) setSelectedInput({...selectedInput, 'customer':  _customers[0]});
                 })
-                .catch(() => {
-                    toast.error('Failed to load periods');
+                .catch(err => {
+                    toast.error('Failed to load customers', err);
                 });
             productService.getAll()
                 .then(_products => {
@@ -44,7 +44,7 @@ function DataInput() {
                     if(_products.length > 0) setCurrProduct({...currProduct, 'product': _products[0]})
                 })
                 .catch(() => {
-                    toast.error('Failed to load periods');
+                    toast.error('Failed to load products');
                 });
             }
         catch(err) {

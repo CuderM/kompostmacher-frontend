@@ -29,11 +29,9 @@ export default function Admin() {
                     console.log(_customers)
                     setCustomers(_customers);
                 })
-                .catch((err) => {
-                    authService.handleTimeOut(err, (err) => {
-                        history.push('login')
-                        toast.error(err + ' : Failed to load periods');
-                    });
+                .catch(err => {
+                    history.push('login')
+                    toast.error(err + ' : Failed to load periods');
                 });
             userService.getAll()
                 .then(_users => {
@@ -282,7 +280,7 @@ export default function Admin() {
         //window.open('C:\Users\poize\Desktop\NeuesTextdokument(2).html')
         history.push({
             pathname: _url,
-            collectionConfirmation: _collectionConfirmation
+            collectionConfirmation: _collectionConfirmation,
         })
     }
 

@@ -16,7 +16,8 @@ import { navItems, navItemsAdmin, navItemsAuth } from './components/navItems';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function App() {
+function App(props) {
+  let { isError } = props
   const { currentUser }  = useContext(AuthContext);
   const [ user, setUser ]  = useState(currentUser)
   let redirect
@@ -27,13 +28,15 @@ function App() {
   useEffect(() => {     
     async function as() {
       try {
-        console.log(authService.getCurrentUser(true).then(data => setUser(data)).then(err => console.log('err ', err)))
+        console.log(authService.getCurrentUser(true).then(data => setUser(data)).then(err => { isError = true; console.log('err ', err) }))
       }
       catch(err) {
+        isError = true;
         console.log('', err)
       }
-    }                     
-    as()
+    }         
+    if(!isError)  as()
+    console.log('isError: ', isError)
     console.log('user ' + user)
 });
 

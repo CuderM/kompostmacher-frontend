@@ -49,12 +49,12 @@ const routeItems = [
     {
         title: 'Form',
         to: '/form/:id',
-        component: ShowHTMLFormular
+        component: Form
     },
     {
         title: 'ShowHTMLFormular',
         to: '/showHTML/:id',
-        component: Form
+        component: ShowHTMLFormular
     }
 
 ]

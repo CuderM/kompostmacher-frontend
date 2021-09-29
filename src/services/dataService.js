@@ -18,9 +18,9 @@ async function get(url, headers, useCacheIfAvailable) {
     credentials: 'include',
   };
 
-  if(useCacheIfAvailable) {
-    requestOptions.headers['If-None-Match'] = sessionStorage.getItem(getCacheKey(url),);
-  }
+  // if(useCacheIfAvailable) {
+  //   requestOptions.headers['If-None-Match'] = sessionStorage.getItem(getCacheKey(url),);
+  // }
 
   return await call(url, requestOptions);
 }
@@ -116,10 +116,11 @@ async function getBody(response) {
   }
 
   if (response.ok === false) {
-    throw new AppError(response.status, responseBody || response.statusText);
+    //console.log(response.status, responseBody || response.statusText);
+    throw new Error(response.status, responseBody || response.statusText);
   }
 
-  authService.clearAuthInfo();
+  
 
   return responseBody;
 }

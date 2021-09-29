@@ -8,7 +8,7 @@ import { useLocation } from 'react-router-dom';
 
 export default function Form () {
     const location = useLocation();
-    const {createFormValidInfo, getEntityById, entityCreate, entityUpdate, checkFields, entity } = location;
+    const {createFormValidInfo, getEntityById, entityCreate, entityUpdate, checkFields, entity} = location;
 
     let { id } = useParams();
 
