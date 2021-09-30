@@ -40,7 +40,7 @@ const Login = (props) => {
                 setState(data.user)
                 localStorage.setItem('id', data.user._id)
                 localStorage.setItem('isAdmin', data.user.admin)
-                history.push('/workingpage');
+                //history.push('/workingpage');
             })
             .catch(err => {
                 console.log(err)

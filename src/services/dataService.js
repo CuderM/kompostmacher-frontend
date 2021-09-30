@@ -94,9 +94,15 @@ function serializePayload(payload, headers) {
 async function call(url, requestOptions) {
   let response = null;
   let body = null;
-  console.log(url);
-  response = await fetch(url, requestOptions);
-  body = await getBody(response);
+  try {
+    response = await fetch(url, requestOptions);
+    body = await getBody(response);
+  }
+  catch(err) {
+    console.log(err)
+    body = err
+  }
+ 
 
   return body;
 }

@@ -18,8 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App(props) {
   let { isError } = props
-  const { currentUser }  = useContext(AuthContext);
-  const [ user, setUser ]  = useState(currentUser)
+  const [ user, setUser ]  = useState({})
   let redirect
 
   let routes = new Routes(setUser)
@@ -28,21 +27,20 @@ function App(props) {
   useEffect(() => {     
     async function as() {
       try {
-        console.log(authService.getCurrentUser(true).then(data => setUser(data)).then(err => { isError = true; console.log('err ', err) }))
+        authService.getCurrentUser(true)
+          .then(data => setUser(data))
+          .catch(err => { isError = true })
       }
       catch(err) {
         isError = true;
-        console.log('', err)
       }
     }         
     if(!isError)  as()
-    console.log('isError: ', isError)
-    console.log('user ' + user)
-});
+}, []);
 
-  redirect = (user ? '/workingpage' : '/login') // : '/test')
+  redirect = (user && user.firstname ? '/workingpage' : '/login') // : '/test')
 
-  if(!user) {
+  if(redirect === '/login') {
     routes = routes.getRouteItemsAuth()
     items = navItemsAuth
   } else {

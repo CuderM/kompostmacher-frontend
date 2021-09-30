@@ -64,7 +64,7 @@ export default function Admin() {
         catch(err) {
             toast.error(err);
         }
-    });
+    }, []);
 
     const openForm = (url, entity) => {
         switch(entity) {
