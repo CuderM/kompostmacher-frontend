@@ -8,8 +8,6 @@ import { productService } from '../services/productService';
 import { customerService } from '../services/customerService';
 import { collectionConfirmationService } from '../services/collectionConfirmationService';
 
-import { authService } from '../services/authService';
-
 import'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function Admin() {
@@ -64,7 +62,7 @@ export default function Admin() {
         catch(err) {
             toast.error(err);
         }
-    }, []);
+    }, [history]);
 
     const openForm = (url, entity) => {
         switch(entity) {

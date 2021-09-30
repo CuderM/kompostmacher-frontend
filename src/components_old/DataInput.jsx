@@ -5,7 +5,7 @@ import { productService } from '../services/productService';
 import { customerService } from '../services/customerService';
 import { parseHTMLFormular } from '../services/parseHTMLFormular';
 
-import head from '../pics/KompostmacherAnschrift.jpg';
+// import head from '../pics/KompostmacherAnschrift.jpg';
 import DOMPurify from 'dompurify'
 
 import '../style/Abholbestaetigung.css';
@@ -50,7 +50,7 @@ function DataInput() {
         catch(err) {
             toast.error(err);
         }
-    }, []);
+    }, [currProduct, selectedInput]);
 
     const onChange = (event) => {
         const { name, selectedOptions, value } = event.target;

@@ -2,9 +2,6 @@ import './style/App.css';
 
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { useContext } from 'react';
-
-import { AuthContext } from './services/AuthContext';
 import { authService } from './services/authService';
 
 import MyNavbar from './components_old/Navbar.jsx';
@@ -29,14 +26,14 @@ function App(props) {
       try {
         authService.getCurrentUser(true)
           .then(data => setUser(data))
-          .catch(err => { isError = true })
+          .catch(err => { console.log(err)})
       }
       catch(err) {
-        isError = true;
+        console.log(err)
       }
     }         
     if(!isError)  as()
-}, []);
+}, [isError]);
 
   redirect = (user && user.firstname ? '/workingpage' : '/login') // : '/test')
 
