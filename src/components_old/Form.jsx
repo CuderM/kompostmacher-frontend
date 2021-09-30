@@ -75,7 +75,8 @@ export default function Form () {
                     console.log(err)
                 });
         }
-    }, [getExmplEntity, FormMode.NEW, FormMode.NOT_FOUND, FormMode.UPDATE, id, getEntityById, createFormValidInfo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [FormMode.NEW, FormMode.NOT_FOUND, FormMode.UPDATE, id, getEntityById, createFormValidInfo]);
 
     const validateField = (name, value) => {
         

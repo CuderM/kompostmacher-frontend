@@ -50,7 +50,8 @@ function DataInput() {
         catch(err) {
             toast.error(err);
         }
-    }, [currProduct, selectedInput]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const onChange = (event) => {
         const { name, selectedOptions, value } = event.target;
