@@ -28,7 +28,7 @@ const Login = (props) => {
     const [formUser, setFormUser] = useState({
         'username': 'Poizen159',
         'password': '123123',
-        'type': 'session'
+        'keepLoggedIn': false
     });
 
     const [formValidationInfo, setFormValidationInfo] = useState(formValidationInfoDEMO);
@@ -61,7 +61,7 @@ const Login = (props) => {
     const onKLIChange = (event) => {
         const { name, value } = event.target;
         let nVal;
-        value ? nVal = 'local' : nVal = 'session'
+        value ? nVal = true : nVal = false
         setFormUser({ ...formUser, [name]: nVal });
     }
 
@@ -150,7 +150,7 @@ const Login = (props) => {
             ></TextInputWithValidation>
 
             <button className="firstOption" disabled={!formValidationInfo["form"]?.value} onClick={() => submit()}>LOG IN</button>
-            <p className="secondOption">Angemeldet bleiben? <input name="type" type="checkbox" onClick={onKLIChange}></input></p>
+            <p className="secondOption">Angemeldet bleiben? <input name="keepLoggedIn" type="checkbox" onClick={onKLIChange}></input></p>
             
             <p className="secondOption">Du hast noch keinen Account? <button className="secondOption" onClick={() => toSignUp()}>SIGN UP</button></p>
         </div>

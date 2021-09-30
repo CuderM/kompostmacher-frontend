@@ -1,7 +1,8 @@
 import { dataService } from './dataService';
 
 const baseUrl = process.env.REACT_APP_BACKEND_URL;
-let storageProvider = localStorage;
+let storageProvider 
+if(localStorage.getItem('kli') === 'true') storageProvider = localStorage; else storageProvider = sessionStorage;
 let authDataSP = storageProvider.getItem('authData')
 let _authInfo = authDataSP// !== null ? Buffer.from(authDataSP, 'base64').toString('utf-8') : null
 
@@ -101,8 +102,9 @@ function getAuthInfo() {
 }
 
 function storeAuthInfo(authInfo, keepLoggedIn) {
-  //keepLoggedIn ? storageProvider = localStorage : storageProvider = sessionStorage
+  keepLoggedIn ? storageProvider = localStorage : storageProvider = sessionStorage
   storageProvider.setItem('authData', authInfo);
+  localStorage.setItem('kli', keepLoggedIn)
 }
 
 function clearAuthInfo() {

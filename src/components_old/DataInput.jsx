@@ -27,7 +27,7 @@ function DataInput() {
     const [displaySign, setDisplaySign] = useState('none');
     
     useEffect(() => {    
-        try {                           
+        try {               
             customerService.getAll()
                 .then(_customers => {
                     console.log(_customers)
