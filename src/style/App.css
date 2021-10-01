@@ -5,7 +5,7 @@
 
 body {
   color: white;
-  background-image: linear-gradient(to bottom right, #142836, #469BF4);
+  background-image: linear-gradient(to bottom right, #704915, #04740e);
 }
 
 .sidebar-wrapper{
@@ -57,7 +57,7 @@ body {
 .button{
   border-radius: 10px;
   border: none;
-  background-color: #2589f5;
+  background-color: #04740e;
   color: white;
 }
 

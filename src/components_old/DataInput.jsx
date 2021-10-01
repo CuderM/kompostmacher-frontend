@@ -137,7 +137,7 @@ function DataInput() {
     }
 
     function save() {
-        collectionConfirmationService.create({ htmlFormular: addSignToHTML(htmlFormular, `<div id="footer" style="display: ${displaySign}"><div id="unterschriftwrapper"><div id="unterschrift">Unterschrift Kunde: ____________________________________</div></div></div><div style="display: ${displaySign}" id="bestaetigung">Die Übernahme der angegebenen Menge wurde vom entsprechenden Zuständigen bestätigt <div style="display: ${displaySign}"><input name="sign" type="checkbox" ${isChecked} />Niemanden Angetroffen</div></div>`) })
+        collectionConfirmationService.create({ to: selectedInput.customer.email, htmlFormular: addSignToHTML(htmlFormular, `<div id="footer" style="display: ${displaySign}"><div id="unterschriftwrapper"><div id="unterschrift">Unterschrift Kunde: ____________________________________</div></div></div><div style="display: ${displaySign}" id="bestaetigung">Die Übernahme der angegebenen Menge wurde vom entsprechenden Zuständigen bestätigt<div style="display: ${displaySign}"><br/><input name="sign" type="checkbox" ${isChecked} />Niemanden Angetroffen</div></div>`) })
             .then(data => {
                 console.log(data);
                 toast.info(data)
