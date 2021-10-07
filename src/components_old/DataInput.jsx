@@ -13,21 +13,21 @@ import '../style/Abholbestaetigung.css';
 import { collectionConfirmationService } from '../services/collectionConfirmationService';
 
 function DataInput() {
-    const [customers, setCustomers] = useState([]);
-    const [products, setProducts] = useState([]);
+    const [customers, setCustomers] = useState();
+    const [products, setProducts] = useState();
     const [currProduct, setCurrProduct] = useState({});
-    const [subCustomer, setSubCustomer] = useState('');
+    // const [subCustomer, setSubCustomer] = useState('');
     const [selectedInput, setSelectedInput] = useState({
-        customer: customers[0] || '',
+        customer: '',
         products: [],
-        subCustomer: subCustomer || ''
+        subCustomer: ''
     });
     const [isChecked, setIsChecked] = useState('');
     const [htmlFormular, setHTMLFormular] = useState('');
     const [displaySign, setDisplaySign] = useState('none');
     
     useEffect(() => {    
-        try {               
+        try {           
             customerService.getAll()
                 .then(_customers => {
                     console.log(_customers)
@@ -46,7 +46,7 @@ function DataInput() {
                 .catch(() => {
                     toast.error('Failed to load products');
                 });
-            }
+        }
         catch(err) {
             toast.error(err);
         }
@@ -79,7 +79,7 @@ function DataInput() {
                     setCurrProduct({...currProduct, 'amount': value})
                     break;
                 case 'subcustomer':
-                    setSubCustomer(value);
+                    // setSubCustomer(value);
                     setSelectedInput({...selectedInput, 'subCustomer': value});
                     break;
                 case 'sign':
@@ -155,7 +155,7 @@ function DataInput() {
                     name="customer" 
                     onChange={onChange}>
                     {
-                        customers.map(customer => {
+                        customers && customers.map(customer => {
                             return <option id={customer._id} value={customer.name}>{customer.name}</option>
                         })
                     }
@@ -176,7 +176,7 @@ function DataInput() {
                     name="product" 
                     onChange={onChange}>
                     {
-                        products.map(product => {
+                        products && products.map(product => {
                             return <option id={product._id}value={product.value}>{product.name}</option>
                         })
                     }

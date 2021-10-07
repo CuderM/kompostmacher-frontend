@@ -21,7 +21,18 @@ export default function Admin() {
 
 
     useEffect(() => {    
-        try {                           
+        try {   
+            collectionConfirmationService.getAll()
+                .then(_collectionConfirmation => {
+                    console.log(_collectionConfirmation)
+                    // _collectionConfirmation.forEach(cc => {
+                    //     cc.date = cc.customer.date;
+                    // });
+                    setCollectionConfirmations(_collectionConfirmation);
+                })
+                .catch(err => {
+                    toast.error(err);
+                });                        
             customerService.getAll()
                 .then(_customers => {
                     console.log(_customers)
@@ -46,17 +57,6 @@ export default function Admin() {
                 })
                 .catch(() => {
                     toast.error('Failed to load periods');
-                });
-            collectionConfirmationService.getAll()
-                .then(_collectionConfirmation => {
-                    console.log(_collectionConfirmation)
-                    // _collectionConfirmation.forEach(cc => {
-                    //     cc.date = cc.customer.date;
-                    // });
-                    setCollectionConfirmations(_collectionConfirmation);
-                })
-                .catch(err => {
-                    toast.error(err);
                 });
             }
         catch(err) {

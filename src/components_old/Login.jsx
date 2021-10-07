@@ -26,7 +26,7 @@ const Login = (props) => {
     }
 
     const [formUser, setFormUser] = useState({
-        'username': 'Poizen159',
+        'username': 'poizen159@gmail.com',
         'password': '123123',
         'keepLoggedIn': false
     });
