@@ -39,7 +39,6 @@ export default function Admin() {
                     setCustomers(_customers);
                 })
                 .catch(err => {
-                    history.push('login')
                     toast.error(err + ' : Failed to load periods');
                 });
             userService.getAll()

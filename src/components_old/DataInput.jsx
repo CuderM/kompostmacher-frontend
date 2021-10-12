@@ -13,8 +13,8 @@ import '../style/Abholbestaetigung.css';
 import { collectionConfirmationService } from '../services/collectionConfirmationService';
 
 function DataInput() {
-    const [customers, setCustomers] = useState();
-    const [products, setProducts] = useState();
+    const [customers, setCustomers] = useState([]);
+    const [products, setProducts] = useState([]);
     const [currProduct, setCurrProduct] = useState({});
     // const [subCustomer, setSubCustomer] = useState('');
     const [selectedInput, setSelectedInput] = useState({
