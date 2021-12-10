@@ -6,8 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { authService } from '../services/authService';
 
-const Login = (props) => {
-    const { setState } = props;
+const Login = ({setState}) => {
     const history = useHistory();
 
     let formValidationInfoDEMO = {

@@ -18,27 +18,53 @@ import '../style/Navbar.css';
 
 const MyNavbar = (props) => {
     const { navItems } = props;
-    return (<div>
-        <Navbar collapseOnSelect expand="lg" >
-            <p style={{ color: 'white', fontSize: 16, padding: 20 }}>MENU</p>
-            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-            <Navbar.Collapse id="responsive-navbar-nav">
-                <Nav className="d-md-block sidebar">
-                    {navItems && navItems.map(item => (
-                        <LinkContainer
-                            key={item.to}
-                            exact
-                            to={item.to}
-                            className='navLink'
-                            activeClassName="activeLink">
-                            <Nav.Link><i className={item.icon + ' i'}></i> {item.title}</Nav.Link>
-                        </LinkContainer>))}
-                </Nav>
-            </Navbar.Collapse>
-        </Navbar>
-    </div>
-    );
-
+    // return (<div>
+    //     <Navbar collapseOnSelect expand="lg" >
+    //         <p style={{ color: 'white', fontSize: 16, padding: 20 }}>MENU</p>
+    //         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+    //         <Navbar.Collapse id="responsive-navbar-nav">
+    //             <Nav className="d-md-block sidebar">
+    //                 {navItems && navItems.map(item => (
+    //                     <LinkContainer
+    //                         key={item.to}
+    //                         exact
+    //                         to={item.to}
+    //                         className='navLink'
+    //                         activeClassName="activeLink">
+    //                         <Nav.Link><i className={item.icon + ' i'}></i> {item.title}</Nav.Link>
+    //                     </LinkContainer>))}
+    //             </Nav>
+    //         </Navbar.Collapse>
+    //     </Navbar>
+    // </div>
+    // );
+    return (
+        <div>
+          <Navbar style={{ paddingTop: "0px", paddingBottom: "0px" }}>
+            <p className="menuHeader">MENU</p>
+            {/* <Navbar.Toggle aria-controls="responsive-navbar-nav" /> */}
+            {/* <Navbar.Collapse id="responsive-navbar-nav"> */}
+            <Nav className="d-md-block sidebar">
+              {navItems &&
+                navItems.map((item) => (
+                  <LinkContainer
+                    key={item.to}
+                    exact
+                    to={item.to}
+                    className="navLink"
+                    activeClassName="activeLink"
+                  >
+                    <Nav.Link>
+                      <i className={item.icon + " i"}></i>{" "}
+                      <h5 className="itemTitle">{item.title}</h5>
+                    </Nav.Link>
+                  </LinkContainer>
+                ))}
+            </Nav>
+            {/* </Navbar.Collapse> */}
+          </Navbar>
+        </div>
+      );
     // const [menuCollapse, setMenuCollapse] = useState(false)
 
     // //create a custom function that will change menucollapse state from false to true and true to false

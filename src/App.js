@@ -7,62 +7,138 @@ import { authService } from './services/authService';
 import MyNavbar from './components_old/Navbar.jsx';
 import MySwitch from "./components_old/Switch.jsx"
 
-import { Routes } from './components/routes';
-import { navItems, navItemsAdmin, navItemsAuth } from './components/navItems';
-
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import WorkingPage from './components_old/WorkingPage';
+import Admin from './components_old/Admin'
+import SimpleForm from './components_old/SimpleForm';
+import Form from './components_old/Form';
+import ShowHTMLFormular from './components_old/ShowHTMLFormular';
+import Signup from './components_old/Register';
+import Login from './components_old/Login';
+
 function App(props) {
-  let { isError } = props
-  const [ user, setUser ]  = useState({})
-  let redirect
+  const [userStatus, setUserStatus] = useState("login");
 
-  let routes = new Routes(setUser)
-  let items = []
+  useEffect(() => {
+    document.title = "Kompostmacher";
 
-  useEffect(() => {     
-    async function as() {
+    if (
+      localStorage.getItem("authData") !== null &&
+      localStorage.getItem("authData") !== "null"
+    ) {
       try {
-        authService.getCurrentUser(true)
-          .then(data => setUser(data))
-          .catch(err => { console.log(err)})
+        authService
+          .getCurrentUser()
+          .then((data) => {
+            setUserStatus(data);
+          })
+          .catch((err) => {
+            toast.error(err);
+          });
+      } catch (err) {
+        toast.error(err.message);
       }
-      catch(err) {
-        console.log(err)
-      }
-    }         
-    if(!isError)  as()
-}, [isError]);
-
-  redirect = (user && user.firstname ? '/workingpage' : '/login') // : '/test')
-
-  if(redirect === '/login') {
-    routes = routes.getRouteItemsAuth()
-    items = navItemsAuth
-  } else {
-    if(user.admin === true) {
-      routes = routes.getRouteItems().concat(routes.getRouteItemsAdmin());
-      items = navItems.concat(navItemsAdmin);
-    } else {
-      routes = routes.getRouteItems()
-      items = navItems
     }
+  }, []);
+
+  let navItems = [
+    {
+      title: 'WorkingPage',
+      to: '/workingpage',
+      component: WorkingPage
+    },
+  ];
+
+  let otherRoutes = [
+    {
+      title: 'WorkingPage',
+      to: '/workingpage',
+      component: WorkingPage
+  },
+  {
+      title: 'SimpleForm',
+      to: '/SimpleForm/:userId',
+      component: SimpleForm
+  },
+  {
+      title: 'Form',
+      to: '/form/:id',
+      component: Form
+  },
+  {
+      title: 'ShowHTMLFormular',
+      to: '/showHTML/:id',
+      component: ShowHTMLFormular
+  }
+  ];
+
+  let authenticationRoutes = [
+    {
+      title: 'Login',
+      to:'/login',
+      component: () => <Login setState={setUserStatus}></Login>
+    },
+    {
+        title: 'Signup',
+        to:'/signup',
+        component: Signup
+    },
+  ];
+
+  function getTheme() {
+    return localStorage.getItem("theme");
+  }
+
+  if (userStatus === "login") {
+    return (
+      <div className={getTheme()}>
+        <div className="form-wrapper">
+          <BrowserRouter>
+            <ToastContainer />
+            <MySwitch
+              otherRoutes={authenticationRoutes}
+              redirect={"/login"}
+            ></MySwitch>
+          </BrowserRouter>
+        </div>
+      </div>
+    );
+  }
+
+  if(typeof userStatus !== 'string' && userStatus.admin === true) {
+    navItems.push({
+      title: 'Admin',
+      to:'/admin',
+      component: Admin
+    })
+    otherRoutes.push({
+      title: 'Admin',
+      to:'/admin',
+      component: Admin
+    })
   }
 
   return (
-    <BrowserRouter>
-      <ToastContainer />
-      <div className="page-content-wrapper">
-        <div className="sidebar-wrapper">
-          <MyNavbar navItems={items}></MyNavbar>
+    <div className={getTheme()}>
+      <BrowserRouter>
+        <ToastContainer />
+        <div className="page-content-wrapper">
+          <div className="sidebar-wrapper">
+            <MyNavbar navItems={navItems}></MyNavbar>
+          </div>
+          <div className="content-wrapper">
+            <MySwitch
+              navItems={navItems}
+              otherRoutes={otherRoutes}
+              redirect={"/workingpage"}
+            ></MySwitch>
+          </div>
         </div>
-        <div className="content-wrapper">
-          <MySwitch routes={routes} redirect={redirect}></MySwitch>
-        </div>
-      </div>
-    </BrowserRouter>
-  )
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;

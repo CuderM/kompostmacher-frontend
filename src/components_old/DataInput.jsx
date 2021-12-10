@@ -5,7 +5,6 @@ import { productService } from '../services/productService';
 import { customerService } from '../services/customerService';
 import { parseHTMLFormular } from '../services/parseHTMLFormular';
 
-// import head from '../pics/KompostmacherAnschrift.jpg';
 import DOMPurify from 'dompurify'
 
 import '../style/Abholbestaetigung.css';
@@ -16,7 +15,6 @@ function DataInput() {
     const [customers, setCustomers] = useState([]);
     const [products, setProducts] = useState([]);
     const [currProduct, setCurrProduct] = useState({});
-    // const [subCustomer, setSubCustomer] = useState('');
     const [selectedInput, setSelectedInput] = useState({
         customer: '',
         products: [],
