@@ -89,12 +89,12 @@ function DataInput() {
     customStyles.content.color = "black";
     }
 
-    function getTheme() {
-        if (!localStorage.getItem("theme")) {
-          localStorage.setItem("theme", "blackTheme");
-        }
-        return localStorage.getItem("theme");
-      }
+    // function getTheme() {
+    //     if (!localStorage.getItem("theme")) {
+    //       localStorage.setItem("theme", "blackTheme");
+    //     }
+    //     return localStorage.getItem("theme");
+    //   }
 
     function getCurrentCustomer(name) {
         return customers.find(customer => customer.name === name)
