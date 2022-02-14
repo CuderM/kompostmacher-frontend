@@ -1,7 +1,7 @@
-import WorkingPage from '../components_old/WorkingPage';
-import Admin from '../components_old/Admin'
-import Signup from '../components_old/Register';
-import Login from '../components_old/Login';
+import WorkingPage from './WorkingPage';
+import Admin from './Admin'
+import Signup from './Register';
+import Login from './Login';
 
 let navItems = [
     {

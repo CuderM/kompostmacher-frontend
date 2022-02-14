@@ -1,6 +1,6 @@
 import React, { useState} from 'react';
 
-import DataInput from './DataInput';
+import DataInput from '../components/DataInput';
 
 function WorkingPage() {
     const [active] = useState("DI");

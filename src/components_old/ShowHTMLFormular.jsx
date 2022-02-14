@@ -4,8 +4,6 @@ import { toast } from 'react-toastify';
 import DOMPurify from 'dompurify'
 import { collectionConfirmationService } from '../services/collectionConfirmationService';
 
-import '../style/Abholbestaetigung.css';
-
 const ShowHTMLFormular = () => {
     const history = useHistory();
     let { id } = useParams();
@@ -20,6 +18,7 @@ const ShowHTMLFormular = () => {
             else toast.error('error while loading HTML -> ' + err);
         })
     return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />
+        // return <div></div>
 }
 
 export default ShowHTMLFormular

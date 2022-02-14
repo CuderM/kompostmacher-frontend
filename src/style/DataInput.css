@@ -1,0 +1,22 @@
+.wpGrid {
+    display: auto;
+    grid-template-rows:
+      "create" 
+      "html";
+    grid-gap: 20px;
+    /* grid-template-columns: 1fr; */
+    /* grid-template-rows: 20%; */
+  }
+  
+  .createGrid {
+    margin-bottom: 2%;
+    padding: 20px;
+    padding-right: 10px;
+    grid-area: create;
+  }
+
+  .htmlGrid {
+    padding: 20px;
+    padding-right: 10px;
+    grid-area: html;
+  }

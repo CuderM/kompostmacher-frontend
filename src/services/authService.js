@@ -1,10 +1,7 @@
 import { dataService } from './dataService';
 
 const baseUrl = process.env.REACT_APP_BACKEND_URL;
-let storageProvider 
-if(localStorage.getItem('kli') === 'true') storageProvider = localStorage; else storageProvider = sessionStorage;
-let authDataSP = storageProvider.getItem('authData')
-let _authInfo = authDataSP// !== null ? Buffer.from(authDataSP, 'base64').toString('utf-8') : null
+const storageProvider = localStorage;
 
 export const authService = {
   login,
@@ -34,7 +31,7 @@ try {
     Authorization: encodedCredentials,
   });
 
-  storeAuthInfo(encodedCredentials, credentials.keepLoggedIn);
+  storeAuthInfo(encodedCredentials);
 
   return Promise.resolve(retVal);
 }
@@ -46,8 +43,6 @@ catch(err) {
 
 async function logout() {
   try {
-    clearAuthInfo();
-
     await dataService.post(`${baseUrl}/logout`, '', {
       'Content-Type': 'text/plain',
       Authorization: getAuthInfo(),
@@ -63,8 +58,6 @@ async function logout() {
 }
 
 function getCurrentUser(useCacheIfAvailable) {
-  //handle useCacheIfAvaiable
-
   return get(`${baseUrl}/currentUser`, combineHeadersWithAuthInfo())
 }
 
@@ -90,21 +83,11 @@ function combineHeadersWithAuthInfo(headers) {
 }
 
 function getAuthInfo() {
-  if (_authInfo != null)
-    return _authInfo;
-  try {
-    _authInfo = storageProvider.getItem('authData');
-    _authInfo = Buffer.from(_authInfo, 'base64').toString('utf-8');
-  } catch (ex) {
-    console.log(ex);
-  }
-  return _authInfo;
+  return storageProvider.getItem('authData');
 }
 
-function storeAuthInfo(authInfo, keepLoggedIn) {
-  keepLoggedIn ? storageProvider = localStorage : storageProvider = sessionStorage
+function storeAuthInfo(authInfo) {
   storageProvider.setItem('authData', authInfo);
-  localStorage.setItem('kli', keepLoggedIn)
 }
 
 function clearAuthInfo() {

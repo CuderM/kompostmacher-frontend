@@ -2,44 +2,59 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.firstOption {
+  }
+  
+  .firstOption {
     color: white;
-    background-color:#0C0F1F !important;
+    background-color: rgb(53, 53, 53) !important;
     width: 100%;
     border-radius: 10px;
     font-size: 14px;
     height: 40px;
-    border-color: #0C0F1F;
+    /* border-color: #777777; */
+    border: none;
     font-family: "Lucida Console", "Courier New", monospace;
-}
-
-.firstOption:hover {
-    background-color:#74767e !important;
-}
-
-.firstOption:disabled,
-.firstOption[disabled]{
-  background-color: #cccccc;
-}
-
-
-.secondOption {
-    margin-top: 1em;
+  }
+  
+  .firstOption:hover {
+    /* border: 1px solid #244fa5; */
+    border-color: #244fa5;
+    background-color: #244fa5 !important;
+  }
+  
+  /* .firstOption:disabled,
+  .firstOption[disabled] {
+    /* background-color: #cccccc; 
+  } */
+  
+  .secondOption {
+    /* margin-top: 1em; */
+    margin-top: 20px;
     color: white 245;
     background-color: transparent;
     font-size: 14px;
     border: none;
     text-align: center;
-    font-family: "Lucida Console", "Courier New", monospace;
-}
-
-.inputLabel{
+    /* font-family: "Lucida Console", "Courier New", monospace; */
+  }
+  
+  .secondOption2 {
+    /* margin-top: 1em; */
+    /* margin-top: 3px; */
+    color: white 245;
+    background-color: transparent;
+    font-size: 14px;
+    border: none;
+    text-align: center;
+    /* font-family: "Lucida Console", "Courier New", monospace; */
+  }
+  
+  .inputLabel {
     font-size: 14px !important;
-}
-
-.formLabel{
+  }
+  
+  .formLabel {
     font-size: 30px !important;
     text-align: center;
-}
+  }
+  

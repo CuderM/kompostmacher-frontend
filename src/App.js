@@ -1,4 +1,6 @@
 import './style/App.css';
+import "./style/WhiteTheme.scss";
+import "./style/BlackTheme.scss";
 
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
@@ -15,10 +17,11 @@ import Admin from './components_old/Admin'
 import SimpleForm from './components_old/SimpleForm';
 import Form from './components_old/Form';
 import ShowHTMLFormular from './components_old/ShowHTMLFormular';
-import Signup from './components_old/Register';
-import Login from './components_old/Login';
+import Signup from './components/User/SignUp';
+import Login from './components/User/Login';
+import Settings from "./components/User/Settings.jsx";
 
-function App(props) {
+function App() {
   const [userStatus, setUserStatus] = useState("login");
 
   useEffect(() => {
@@ -45,46 +48,56 @@ function App(props) {
 
   let navItems = [
     {
-      title: 'WorkingPage',
+      title: 'Erstellen',
       to: '/workingpage',
-      component: WorkingPage
+      component: WorkingPage,
+      icon: "bi bi-pencil",
+    },
+    {
+      title: "Settings",
+      to: "/settings",
+      component: () => <Settings setUserStatus={setUserStatus}></Settings>,
+      icon: "bi bi-gear",
     },
   ];
 
   let otherRoutes = [
     {
-      title: 'WorkingPage',
       to: '/workingpage',
       component: WorkingPage
   },
   {
-      title: 'SimpleForm',
       to: '/SimpleForm/:userId',
       component: SimpleForm
   },
   {
-      title: 'Form',
       to: '/form/:id',
       component: Form
   },
   {
-      title: 'ShowHTMLFormular',
       to: '/showHTML/:id',
       component: ShowHTMLFormular
-  }
+  },
+  { 
+      to: "/settings/editUser/:id", 
+      component: Form 
+  },
   ];
 
   let authenticationRoutes = [
     {
       title: 'Login',
       to:'/login',
-      component: () => <Login setState={setUserStatus}></Login>
+      component: () => <Login setUserStatus={setUserStatus}></Login>
     },
     {
-        title: 'Signup',
-        to:'/signup',
-        component: Signup
+      to: "/signup",
+      component: () => <Signup setUserStatus={setUserStatus} />,
     },
+    // { 
+    //   to: "/settings/changepassword/:username", 
+    //   component: () => <ChangePassword setUserStatus={setUserStatus} />, 
+    // }
   ];
 
   function getTheme() {
@@ -111,17 +124,17 @@ function App(props) {
     navItems.push({
       title: 'Admin',
       to:'/admin',
-      component: Admin
+      component: Admin,
+      icon: "bi bi-tools",
     })
     otherRoutes.push({
-      title: 'Admin',
       to:'/admin',
       component: Admin
     })
   }
 
   return (
-    <div className={getTheme()}>
+    <div  className={getTheme()}>
       <BrowserRouter>
         <ToastContainer />
         <div className="page-content-wrapper">
