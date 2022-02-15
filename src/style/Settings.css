@@ -1,0 +1,60 @@
+.settingsGrid {
+    display: grid;
+    grid-template-areas:
+      "profile profile"
+      "periode periode"
+      "grade grade";
+    grid-gap: 20px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 150px 110px 1fr;
+  }
+  
+  .profileRow {
+    padding: 20px;
+    padding-right: 10px;
+    grid-area: profile;
+  }
+  
+  .PeriodeRow {
+    padding: 20px;
+    padding-right: 10px;
+    grid-area: periode;
+    align-items: center;
+  }
+  
+  .RecordTypeRow {
+    padding: 20px;
+    padding-right: 10px;
+    grid-area: record;
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+  
+  .GradeschemaRow {
+    padding: 20px;
+    padding-right: 10px;
+    grid-area: grade;
+  }
+  
+  .GradeschemaTypeRow {
+    padding: 20px;
+    padding-right: 10px;
+    grid-area: gradetype;
+  }
+  
+  .line-wrapper {
+    display: flex;
+  }
+  
+  .right {
+    margin-top: 0;
+    margin-right: 0;
+    right: 10px;
+    margin-left: auto;
+  }
+  
+  .recordTypeEntry {
+    margin-right: 10px;
+    color: green;
+  }
+  

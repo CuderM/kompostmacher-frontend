@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import Modal from "react-modal";
 
 import { productService } from '../services/productService';
 import { customerService } from '../services/customerService';
 import { parseHTMLFormular } from '../services/parseHTMLFormular';
-import SelectInputValiation from "../Utils/SelectInputValidation";
+import SelectInputValidation from "./Utils/SelectInputValidation";
+import TextInputWithValidation from "./Utils/TextInputValidation";
+import CreateProduct from './Modals/CreateProduct'
 
 import DOMPurify from 'dompurify'
 
-import '../style/Abholbestaetigung.css';
-
 import { collectionConfirmationService } from '../services/collectionConfirmationService';
+
+import '../style/DataInput.css'
 
 function DataInput() {
     const [customers, setCustomers] = useState([]);
@@ -24,14 +27,28 @@ function DataInput() {
     const [isChecked, setIsChecked] = useState('');
     const [htmlFormular, setHTMLFormular] = useState('');
     const [displaySign, setDisplaySign] = useState('none');
+
+
+    const [modalIsOpenAddProduct, setModalIsOpenAddProduct] = useState(false);
     
+    function closeModalAddProduct(add) {
+        setModalIsOpenAddProduct(false);
+        // if (newProduct) {
+            // addProduct(newProduct);
+        // }
+        if(add) addProduct(currProduct);
+      }
+
     useEffect(() => {    
         try {           
             customerService.getAll()
                 .then(_customers => {
                     console.log(_customers)
                     setCustomers(_customers);
-                    if(_customers.length > 0) setSelectedInput({...selectedInput, 'customer':  _customers[0]});
+                    if(_customers.length > 0) {
+                        setSelectedInput({...selectedInput, 'customer':  _customers[0]});
+                        setCustomers(_customers)
+                    }
                 })
                 .catch(err => {
                     toast.error('Failed to load customers', err);
@@ -40,7 +57,10 @@ function DataInput() {
                 .then(_products => {
                     console.log(_products)
                     setProducts(_products);
-                    if(_products.length > 0) setCurrProduct({...currProduct, 'product': _products[0]})
+                    if(_products.length > 0)  {
+                        setCurrProduct({...currProduct, 'product': _products[0]})
+                        setProducts(_products)
+                    }
                 })
                 .catch(() => {
                     toast.error('Failed to load products');
@@ -52,27 +72,49 @@ function DataInput() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const customStyles = {
+        content: {
+          top: "15%",
+          left: "25%",
+          right: "25%",
+          bottom: "auto",
+          background: "#0C0F1F",
+          color: "white",
+          border: "none",
+        },
+    };
+
+    if (localStorage.getItem("theme") === "whiteTheme") {
+    customStyles.content.background = "white";
+    customStyles.content.color = "black";
+    }
+
+    // function getTheme() {
+    //     if (!localStorage.getItem("theme")) {
+    //       localStorage.setItem("theme", "blackTheme");
+    //     }
+    //     return localStorage.getItem("theme");
+    //   }
+
+    function getCurrentCustomer(name) {
+        return customers.find(customer => customer.name === name)
+    }
+
+    function getCurrentProduct(name) {
+        return products.find(prod => prod.name === name)
+    }
+
     const onChange = (event) => {
-        const { name, selectedOptions, value } = event.target;
+        const { name, value } = event.target;
         try {
             switch(name) {
                 case 'customer':
-                    customerService.getById(selectedOptions[0].id)
-                        .then(data => {
-                            setSelectedInput({...selectedInput, 'customer': data});
-                        })
-                        .catch(err => {
-                            toast.error(err);
-                        });
+                    let customer = getCurrentCustomer(value)
+                    setSelectedInput({...selectedInput, [name]: customer});
                     break;
                 case 'product':
-                    productService.getById(selectedOptions[0].id)
-                        .then(data => {
-                            setCurrProduct({...currProduct, 'product': data})
-                        })
-                        .catch(err => {
-                            toast.error(err);
-                        });
+                    let product = getCurrentProduct(value)
+                    setCurrProduct({...currProduct, 'product': product})
                     break;
                 case 'amount':
                     setCurrProduct({...currProduct, 'amount': value})
@@ -113,13 +155,20 @@ function DataInput() {
         }
     ];
 
+    const formValidationInfo= {
+        form: {
+          valid: true,
+          msg: "",
+        },
+      };
+
     function addSignToHTML(html, addition) {
         html = html.replace('<div style="display: none">sign<div/>', addition);
         return html;
     }
 
-    function addProduct() {
-        setSelectedInput({...selectedInput, 'products': [...selectedInput.products, currProduct]})
+    function addProduct(newProduct) {
+        setSelectedInput({...selectedInput, 'products': [...selectedInput.products, newProduct]})
     }
 
     function submit() {
@@ -146,96 +195,92 @@ function DataInput() {
             })
     }
 
+    function getCustomerOptions() {
+        let rcs = customers.map((customer) => {
+              return { value: customer.name, label: customer.name }
+        })
+        return rcs
+      }
+
+      function getProductOptions() {
+        let rcs = products.map((prod) => {
+              return { value: prod.name, label: prod.name }
+        })
+        return rcs
+      }
+
     return (
-        <div>
-            <div style={{textAlign: "center"}}>
-                <SelectInputValiation
-                    formObject={formTimetable}
-                    objectKey="weekday"
-                    label="Wochentag"
-                    formValidationInfo={formValidationInfo}
+        <div className='wpGrid'>
+            <div className='grayback createGrid'>
+                <SelectInputValidation
+                    formObject={selectedInput.customer}
+                    objectKey="customer"
+                    label="Kunde: "
                     onChange={onChange}
                     validClass=" "
                     invalidClass=" "
-                    options={
-                        customers && customers.map(customer => {
-                        return <option id={customer._id} value={customer.name}>{customer.name}</option>
-                    })}
-                ></SelectInputValiation>
-                {/*<select 
-                    key="customer" 
-                    name="customer" 
-                    onChange={onChange}>
-                    {
-                        customers && customers.map(customer => {
-                            return <option id={customer._id} value={customer.name}>{customer.name}</option>
-                        })
-                    }
-                </select>*/}
-                <br/>
-                <input 
-                    type="text" 
-                    id="inputSubcustomer" 
+                    options={getCustomerOptions()}
+                ></SelectInputValidation>
+                <TextInputWithValidation
+                    formObject={{}}
+                    objectKey="subcustomer"
                     placeholder="Subkunde"
-                    key='subcustomer'
-                    name="subcustomer" 
+                    label="Subkunde: "
                     onChange={onChange}
-                >
-                </input>
-                <br/>
-                <select 
-                    key="product"
-                    name="product" 
-                    onChange={onChange}>
-                    {
-                        products && products.map(product => {
-                            return <option id={product._id}value={product.value}>{product.name}</option>
-                        })
-                    }
-                </select>
-                <br/>
-                <input 
-                    type="number" 
-                    id="inputMenge" 
-                    placeholder="Menge"
-                    key='amount'
-                    name="amount" 
-                    onChange={onChange}
-                >
-                </input>
-                <br/>
+                    validClass=" "
+                    invalidClass=" "
+                    formValidationInfo={formValidationInfo}
+                ></TextInputWithValidation>
                 <button 
                     type="submit" 
-                    class="btn btn-primary"
-                    onClick={addProduct}>
+                    className="button"
+                    onClick={() => setModalIsOpenAddProduct(true)/*addProduct*/}>
                     add Produkt
                 </button>
+                <br/><br/>
                 <button 
                     type="submit" 
-                    class="btn btn-primary"
+                    className="button"
                     onClick={submit}>
                     Submit
                 </button>
                 <br/>
+            </div>
+            <div className='grayback htmlGrid'>
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(htmlFormular) }} />
                 {/*<div style={{display: displaySign}}><input onChange={onChange} name="sign" type="checkbox" checked={isChecked} />Niemanden Angetroffen</div>*/}
                 <br/>
-                <div id="footer" style={{display: displaySign}}>
+                <div style={{display: displaySign}}>
                     <div id="unterschriftwrapper">
                         <div id="unterschrift">Unterschrift Kunde: ____________________________________</div>
                     </div>
                 </div>
                 <div style={{display: displaySign}} id="bestaetigung">Die Übernahme der angegebenen Menge wurde vom entsprechenden Zuständigen bestätigt <div style={{display: displaySign}}><input onChange={onChange} name="sign" type="checkbox"/>Niemanden Angetroffen</div></div>
-                <br/>
                 <button 
                     type="submit" 
-                    class="btn btn-primary"
+                    className="button"
                     onClick={save}>
                     Speichern
                 </button>
-                <br/>
             </div>
+    
+            <Modal
+                isOpen={modalIsOpenAddProduct}
+                onRequestClose={closeModalAddProduct}
+                style={customStyles}
+                overlayClassName="Overlay"
+                ariaHideApp={false}
+            >
+                <CreateProduct
+                    closeModal={closeModalAddProduct}
+                    options={getProductOptions()}
+                    selectedInput={selectedInput}
+                    onChange={onChange}
+                ></CreateProduct>
+            </Modal>
+            
         </div>
+    
     )
 }
 export default DataInput;

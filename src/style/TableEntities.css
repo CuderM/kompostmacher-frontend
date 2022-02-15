@@ -1,0 +1,46 @@
+@media only screen and (max-width: 600px) {
+    .tableGrid {
+        display: grid;
+        grid-gap: 20px;
+        grid-template-columns: 1fr;
+    
+        /* grid-template-rows: 75% 75%; */
+    }
+}
+@media only screen and (min-width: 992px) {
+    .tableGrid {
+        display: grid;
+        grid-gap: 20px;
+        grid-template-columns: 1fr 1fr;
+    
+        /* grid-template-rows: 75% 75%; */
+    }
+}
+  
+.customerGrid {
+    margin: 2%;
+    padding: 20px;
+    padding-right: 10px;
+    grid-area: customers;
+}
+
+.productGrid {
+    margin: 2%;
+    padding: 20px;
+    padding-right: 10px;
+    grid-area: products;
+}
+
+.userGrid {
+    margin: 2%;
+    padding: 20px;
+    padding-right: 10px;
+    grid-area: users;
+}
+
+.ccsGrid {
+    margin: 2%;
+    padding: 20px;
+    padding-right: 10px;
+    grid-area: ccs;
+}

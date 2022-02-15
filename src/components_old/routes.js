@@ -1,10 +1,10 @@
-import WorkingPage from '../components_old/WorkingPage';
-import Admin from '../components_old/Admin'
-import SimpleForm from '../components_old/SimpleForm';
-import Form from '../components_old/Form';
-import ShowHTMLFormular from '../components_old/ShowHTMLFormular';
-import Signup from '../components_old/Register';
-import Login from '../components_old/Login';
+import WorkingPage from './WorkingPage';
+import Admin from './Admin'
+import SimpleForm from './SimpleForm';
+import Form from './Form';
+import ShowHTMLFormular from './ShowHTMLFormular';
+import Signup from './Register';
+import Login from './Login';
 // import SmplForm from '../testfolder/smplForm'
 
 class Routes {

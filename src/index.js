@@ -1,25 +1,44 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+
+import 'bootstrap/dist/css/bootstrap.css';
+import "bootstrap-icons/font/bootstrap-icons.css";
+
+// import {ErrorBoundary} from './components_old/ErrorBoundry'
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import 'bootstrap/dist/css/bootstrap.css';
 
-import {ErrorBoundary} from './components_old/ErrorBoundry'
+function getTheme() {
+  if (!localStorage.getItem("theme")) {
+    localStorage.setItem("theme", "whiteTheme");
+  }
+  return localStorage.getItem("theme");
+}
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ErrorBoundary>
+  <div className={getTheme()}>
       <App />
-    </ErrorBoundary>
-    
-  </React.StrictMode>,
+  </div>,
   document.getElementById('root')
 );
 
 // ReactDOM.render(
 //   <React.StrictMode>
-//     <App />
+//   <div  className={getTheme()}>
+//     <ErrorBoundary>
+//       <App />
+//     </ErrorBoundary>
+//   </div>
+    
+//   </React.StrictMode>,
+//   document.getElementById('root')
+// );
+
+// ReactDOM.render(
+//   <React.StrictMode>
+//       <App />
 //   </React.StrictMode>,
 //   document.getElementById('root')
 // );

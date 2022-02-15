@@ -1,71 +1,157 @@
 import './style/App.css';
+import "./style/WhiteTheme.scss";
+import "./style/BlackTheme.scss";
 
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { useContext } from 'react';
-
-import { AuthContext } from './services/AuthContext';
 import { authService } from './services/authService';
 
 import MyNavbar from './components_old/Navbar.jsx';
 import MySwitch from "./components_old/Switch.jsx"
 
-import { Routes } from './components/routes';
-import { navItems, navItemsAdmin, navItemsAuth } from './components/navItems';
-
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function App(props) {
-  let { isError } = props
-  const [ user, setUser ]  = useState({})
-  let redirect
+import WorkingPage from './components_old/WorkingPage';
+import Admin from './components/Admin'
+import SimpleForm from './components_old/SimpleForm';
+import Form from './components_old/Form';
+import ShowHTMLFormular from './components_old/ShowHTMLFormular';
+import Signup from './components/User/SignUp';
+import Login from './components/User/Login';
+import Settings from "./components/User/Settings.jsx";
 
-  let routes = new Routes(setUser)
-  let items = []
+function App() {
+  const [userStatus, setUserStatus] = useState("login");
 
-  useEffect(() => {     
-    async function as() {
+  useEffect(() => {
+    document.title = "Kompostmacher";
+
+    if (
+      localStorage.getItem("authData") !== null &&
+      localStorage.getItem("authData") !== "null"
+    ) {
       try {
-        authService.getCurrentUser(true)
-          .then(data => setUser(data))
-          .catch(err => { isError = true })
+        authService
+          .getCurrentUser()
+          .then((data) => {
+            setUserStatus(data);
+          })
+          .catch((err) => {
+            toast.error(err);
+          });
+      } catch (err) {
+        toast.error(err.message);
       }
-      catch(err) {
-        isError = true;
-      }
-    }         
-    if(!isError)  as()
-}, []);
-
-  redirect = (user && user.firstname ? '/workingpage' : '/login') // : '/test')
-
-  if(redirect === '/login') {
-    routes = routes.getRouteItemsAuth()
-    items = navItemsAuth
-  } else {
-    if(user.admin === true) {
-      routes = routes.getRouteItems().concat(routes.getRouteItemsAdmin());
-      items = navItems.concat(navItemsAdmin);
-    } else {
-      routes = routes.getRouteItems()
-      items = navItems
     }
+  }, []);
+
+  let navItems = [
+    {
+      title: 'Erstellen',
+      to: '/workingpage',
+      component: WorkingPage,
+      icon: "bi bi-pencil",
+    },
+    {
+      title: "Settings",
+      to: "/settings",
+      component: () => <Settings setUserStatus={setUserStatus}></Settings>,
+      icon: "bi bi-gear",
+    },
+  ];
+
+  let otherRoutes = [
+    {
+      to: '/workingpage',
+      component: WorkingPage
+  },
+  {
+      to: '/SimpleForm/:userId',
+      component: SimpleForm
+  },
+  {
+      to: '/form/:id',
+      component: Form
+  },
+  {
+      to: '/showHTML/:id',
+      component: ShowHTMLFormular
+  },
+  { 
+      to: "/settings/editUser/:id", 
+      component: Form 
+  },
+  ];
+
+  let authenticationRoutes = [
+    {
+      title: 'Login',
+      to:'/login',
+      component: () => <Login setUserStatus={setUserStatus}></Login>
+    },
+    {
+      to: "/signup",
+      component: () => <Signup setUserStatus={setUserStatus} />,
+    },
+    // { 
+    //   to: "/settings/changepassword/:username", 
+    //   component: () => <ChangePassword setUserStatus={setUserStatus} />, 
+    // }
+  ];
+
+  function getTheme() {
+    return localStorage.getItem("theme");
+  }
+
+  if (userStatus === "login") {
+    return (
+      <div className={getTheme()}>
+        <div className="form-wrapper">
+          <BrowserRouter>
+            <ToastContainer />
+            <MySwitch
+              otherRoutes={authenticationRoutes}
+              redirect={"/login"}
+            ></MySwitch>
+          </BrowserRouter>
+        </div>
+      </div>
+    );
+  }
+
+  if(typeof userStatus !== 'string' && userStatus.admin === true) {
+    navItems.push({
+      title: 'Admin',
+      to:'/admin',
+      component: Admin,
+      icon: "bi bi-tools",
+    })
+    otherRoutes.push({
+      to:'/admin',
+      component: Admin
+    })
   }
 
   return (
-    <BrowserRouter>
-      <ToastContainer />
-      <div className="page-content-wrapper">
-        <div className="sidebar-wrapper">
-          <MyNavbar navItems={items}></MyNavbar>
+    <div  className={getTheme()}>
+      <BrowserRouter>
+        <ToastContainer />
+        <div className="page-content-wrapper">
+          <div className="sidebar-wrapper">
+            <MyNavbar navItems={navItems}></MyNavbar>
+          </div>
+          <div className="content-wrapper">
+            <MySwitch
+              navItems={navItems}
+              otherRoutes={otherRoutes}
+              redirect={"/workingpage"}
+            ></MySwitch>
+          </div>
         </div>
-        <div className="content-wrapper">
-          <MySwitch routes={routes} redirect={redirect}></MySwitch>
-        </div>
-      </div>
-    </BrowserRouter>
-  )
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;

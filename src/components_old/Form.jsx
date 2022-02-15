@@ -19,7 +19,8 @@ export default function Form () {
     const [formValidationInfo, setFormValidationInfo] = useState(createFormValidInfo(true));
     const history = useHistory();
 
-    function getExmplEntity() {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const getExmplEntity = () => {
         let ent;
 
         switch(entity) {
@@ -74,6 +75,7 @@ export default function Form () {
                     console.log(err)
                 });
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [FormMode.NEW, FormMode.NOT_FOUND, FormMode.UPDATE, id, getEntityById, createFormValidInfo]);
 
     const validateField = (name, value) => {

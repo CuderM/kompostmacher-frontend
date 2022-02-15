@@ -1,0 +1,120 @@
+.blackTheme {
+  background-image: linear-gradient(to bottom right, #142836, #469bf4);
+  max-height: 100vh;
+  overflow-y: auto;
+
+  ::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0c0f1f;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #555;
+    /* border-radius: 4px; */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(56, 56, 56);
+  }
+
+  input {
+    // padding: 20px;
+    background-color: #242424 !important;
+    color: rgb(243, 243, 243) !important;
+    border: 1px solid #242424 !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+
+  .recordComment {
+    min-width: 120px;
+  }
+
+  .recordTable {
+    table-layout: auto;
+    overflow-x: scroll;
+  }
+
+  .accordion-title {
+    background-color: #242424;
+    color: white;
+    border-color: #2589f5;
+  }
+
+  .accordion-title:hover {
+    background-color: #363636;
+  }
+
+  .titleActive {
+    background-color: #242424;
+  }
+
+  .accordion-content {
+    background: #0c0f1f;
+    color: white;
+    border-color: #2589f5;
+  }
+
+  .addItem {
+    color: #2589f5;
+  }
+
+  .seeDeactivated {
+    color: #2589f5;
+  }
+
+  .iconBack {
+    color: white;
+  }
+
+  .iconBack:hover {
+    color: gray;
+  }
+
+  @media screen and (max-width: 991px) {
+    .navLink {
+      margin: 0px;
+      border: none;
+      padding-left: 0px !important;
+    }
+
+    .sidebar-wrapper {
+      height: 55px !important;
+      left: 7%;
+      right: 7%;
+      padding-top: 7px;
+      // padding-left: 1px;
+    }
+
+    .navbar {
+      padding: 0px !important;
+      // padding-left: 16px !important;
+      // padding-right: 5px;
+      /* width: unset !important; */
+      /* height: unset !important; */
+      /* max-height: 50px !important; */
+    }
+
+    ::-webkit-scrollbar {
+      all: unset;
+      display: none;
+    }
+
+    ::-webkit-scrollbar-track {
+      all: unset;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      all: unset;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      all: unset;
+    }
+  }
+}

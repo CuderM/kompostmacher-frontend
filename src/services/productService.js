@@ -18,12 +18,12 @@ function getById(id) {
   return authService.get(`${baseUrl}/${id}`);
 }
 
-function create(periode) {
-  return authService.post(baseUrl, periode);
+function create(product) {
+  return authService.post(baseUrl, product);
 }
 
-function update(id, periode) {
-  return authService.patch(`${baseUrl}/${id}`, periode);
+function update(id, product) {
+  return authService.patch(`${baseUrl}/${id}`, product);
 }
 
 function _delete(id) {

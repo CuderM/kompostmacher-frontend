@@ -8,8 +8,6 @@ import { productService } from '../services/productService';
 import { customerService } from '../services/customerService';
 import { collectionConfirmationService } from '../services/collectionConfirmationService';
 
-import { authService } from '../services/authService';
-
 import'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function Admin() {
@@ -23,14 +21,24 @@ export default function Admin() {
 
 
     useEffect(() => {    
-        try {                           
+        try {   
+            collectionConfirmationService.getAll()
+                .then(_collectionConfirmation => {
+                    console.log(_collectionConfirmation)
+                    // _collectionConfirmation.forEach(cc => {
+                    //     cc.date = cc.customer.date;
+                    // });
+                    setCollectionConfirmations(_collectionConfirmation);
+                })
+                .catch(err => {
+                    toast.error(err);
+                });                        
             customerService.getAll()
                 .then(_customers => {
                     console.log(_customers)
                     setCustomers(_customers);
                 })
                 .catch(err => {
-                    history.push('login')
                     toast.error(err + ' : Failed to load periods');
                 });
             userService.getAll()
@@ -49,22 +57,11 @@ export default function Admin() {
                 .catch(() => {
                     toast.error('Failed to load periods');
                 });
-            collectionConfirmationService.getAll()
-                .then(_collectionConfirmation => {
-                    console.log(_collectionConfirmation)
-                    // _collectionConfirmation.forEach(cc => {
-                    //     cc.date = cc.customer.date;
-                    // });
-                    setCollectionConfirmations(_collectionConfirmation);
-                })
-                .catch(err => {
-                    toast.error(err);
-                });
             }
         catch(err) {
             toast.error(err);
         }
-    }, []);
+    }, [history]);
 
     const openForm = (url, entity) => {
         switch(entity) {

@@ -17,10 +17,11 @@ export const authService = {
 };
 
 async function login(credentials) {
-  let dt = new Date()
-  const credString = `${credentials.username}:${credentials.password}:${credentials.type}:${dt.getTime()}`;
+  let authTime;
+  credentials.keepLoggedIn ? authTime = -1 : authTime = Date.now();
+  
+  const credString = `${credentials.username}:${credentials.password}:${authTime}`;
   const encodedCredentials = Buffer.from(credString).toString('base64');
-
 
 try {
   clearAuthInfo();
@@ -56,8 +57,8 @@ async function logout() {
   }
 }
 
-function getCurrentUser() {
-  return get(`${baseUrl}/currentUser`)
+function getCurrentUser(useCacheIfAvailable) {
+  return get(`${baseUrl}/currentUser`, combineHeadersWithAuthInfo())
 }
 
 function get(url, headers) {

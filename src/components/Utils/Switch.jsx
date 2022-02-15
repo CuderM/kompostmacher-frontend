@@ -24,18 +24,6 @@ const MySwitch = (props) => {
              <Route render={() => <Redirect to={{pathname: redirect}} />} />
         </Switch>
     );
-    // return (
-    //     <Switch>
-    //         {otherRoutes && otherRoutes.map(item => (
-    //             <Route
-    //                 key={item.to}
-    //                 exact
-    //                 path={item.to}
-    //                 component={item.component}>
-    //             </Route>))}
-    //          <Route render={() => <Redirect to={{pathname: redirect}} />} />
-    //     </Switch>
-    // );
 };
 
 export default MySwitch;

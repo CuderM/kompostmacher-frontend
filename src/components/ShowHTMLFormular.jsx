@@ -17,8 +17,7 @@ const ShowHTMLFormular = () => {
             if(id === 'new') history.push('/workingpage');
             else toast.error('error while loading HTML -> ' + err);
         })
-    return <div className='full grayback' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />
-        // return <div></div>
+    return <div><div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} /></div>
 }
 
 export default ShowHTMLFormular

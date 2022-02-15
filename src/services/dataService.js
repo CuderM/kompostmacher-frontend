@@ -1,5 +1,4 @@
 import AppError from '../AppError';
-import { authService } from './authService';
 
 // CORS - Enabled
 // Parsing JSON
@@ -26,9 +25,9 @@ async function get(url, headers, useCacheIfAvailable) {
 }
 
 
-function getCacheKey(url) {
-  return `${getCacheKeyPrefix()}${url}`;
-}
+// function getCacheKey(url) {
+//   return `${getCacheKeyPrefix()}${url}`;
+// }
 
 export function getCacheKeyPrefix() {
   return 'AppCache_';
