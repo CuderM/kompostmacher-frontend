@@ -197,7 +197,7 @@ export default function Settings({ setUserStatus }) {
         </div>
         <div className="line-wrapper">
           <p>Eingeloggt als: </p>
-          <p style={{ color: "green", display: "inline-block" }}> {userName}</p>
+          <p style={{ color: "green", display: "inline-block" }}>{userName}</p>
         </div>
         <button className="button bottom" onClick={() => logout()}>
           log out

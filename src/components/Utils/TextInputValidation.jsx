@@ -10,10 +10,15 @@ export default function TextInputValidation(props) {
     onChange,
     type,
     className,
+    validClass,
+    invalidClass,
+    formValidationInfo
   } = props;
   let inputType = type || "text";
   let design = className || "";
   let key = objectKey;
+  let valid = validClass || "is-valid";
+  let inValid = invalidClass || "is-invalid";
 
   return (
     <div className="form-group">
@@ -23,15 +28,19 @@ export default function TextInputValidation(props) {
       <input
         type={inputType}
         autoComplete="off"
-        className={"form-control " + design}
+        className={
+          !formValidationInfo[key]?.valid
+            ? "form-control " + inValid + " " + design
+            : "form-control " + valid + " " + +design
+        }
         id={`inputCtrl_${key}`}
         name={key}
         placeholder={placeholder}
         value={formObject[key]}
         onChange={onChange}
       ></input>
-      {/*<div className="valid-feedback">{formValidationInfo[key]?.msg}</div> 
-      <div className="invalid-feedback">{formValidationInfo[key]?.msg}</div>*/}
+      {/*<div className="valid-feedback">{formValidationInfo[key]?.msg}</div>*/} 
+      <div className="invalid-feedback">{formValidationInfo[key]?.msg}</div>
     </div>
   );
 }

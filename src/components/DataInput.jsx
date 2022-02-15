@@ -31,12 +31,12 @@ function DataInput() {
 
     const [modalIsOpenAddProduct, setModalIsOpenAddProduct] = useState(false);
     
-    function closeModalAddProduct(/*newProduct*/) {
+    function closeModalAddProduct(add) {
         setModalIsOpenAddProduct(false);
         // if (newProduct) {
             // addProduct(newProduct);
         // }
-        addProduct(currProduct);
+        if(add) addProduct(currProduct);
       }
 
     useEffect(() => {    
@@ -155,6 +155,13 @@ function DataInput() {
         }
     ];
 
+    const formValidationInfo= {
+        form: {
+          valid: true,
+          msg: "",
+        },
+      };
+
     function addSignToHTML(html, addition) {
         html = html.replace('<div style="display: none">sign<div/>', addition);
         return html;
@@ -203,7 +210,7 @@ function DataInput() {
       }
 
     return (
-        <div className=' wpGrid'>
+        <div className='wpGrid'>
             <div className='grayback createGrid'>
                 <SelectInputValidation
                     formObject={selectedInput.customer}
@@ -220,17 +227,20 @@ function DataInput() {
                     placeholder="Subkunde"
                     label="Subkunde: "
                     onChange={onChange}
+                    validClass=" "
+                    invalidClass=" "
+                    formValidationInfo={formValidationInfo}
                 ></TextInputWithValidation>
                 <button 
                     type="submit" 
-                    class="button"
+                    className="button"
                     onClick={() => setModalIsOpenAddProduct(true)/*addProduct*/}>
                     add Produkt
                 </button>
                 <br/><br/>
                 <button 
                     type="submit" 
-                    class="button"
+                    className="button"
                     onClick={submit}>
                     Submit
                 </button>
@@ -248,26 +258,26 @@ function DataInput() {
                 <div style={{display: displaySign}} id="bestaetigung">Die Übernahme der angegebenen Menge wurde vom entsprechenden Zuständigen bestätigt <div style={{display: displaySign}}><input onChange={onChange} name="sign" type="checkbox"/>Niemanden Angetroffen</div></div>
                 <button 
                     type="submit" 
-                    class="button"
+                    className="button"
                     onClick={save}>
                     Speichern
                 </button>
             </div>
     
             <Modal
-                    isOpen={modalIsOpenAddProduct}
-                    onRequestClose={closeModalAddProduct}
-                    style={customStyles}
-                    overlayClassName="Overlay"
-                    ariaHideApp={false}
-                >
-                    <CreateProduct
+                isOpen={modalIsOpenAddProduct}
+                onRequestClose={closeModalAddProduct}
+                style={customStyles}
+                overlayClassName="Overlay"
+                ariaHideApp={false}
+            >
+                <CreateProduct
                     closeModal={closeModalAddProduct}
                     options={getProductOptions()}
                     selectedInput={selectedInput}
                     onChange={onChange}
-                    ></CreateProduct>
-                </Modal>
+                ></CreateProduct>
+            </Modal>
             
         </div>
     

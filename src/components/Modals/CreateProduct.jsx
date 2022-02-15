@@ -11,6 +11,13 @@ export default function CreateProduct({ closeModal, options, selectedInput, onCh
     return localStorage.getItem("theme");
   }
 
+  const formValidationInfo= {
+    form: {
+      valid: true,
+      msg: "",
+    },
+  };
+
   return (
     <div className={"full " + getTheme()}>
       <div className="grayback">
@@ -19,24 +26,32 @@ export default function CreateProduct({ closeModal, options, selectedInput, onCh
             objectKey="product"
             label="Produkt: "
             onChange={onChange}
-            validClass=" "
-            invalidClass=" "
             options={options}
         ></SelectInputValidation>
         <TextInputValidation
             type="number" 
             formObject={{}}
             objectKey="amount"
-            placeholder="Menge"
+            placeholder="1"
             label="Menge: "
             onChange={onChange}
+            validClass=" "
+            invalidClass=" "
+            formValidationInfo={formValidationInfo}
         ></TextInputValidation>
 
         <button
           className="button"
-          onClick={() => closeModal()}
+          onClick={() => closeModal(true)}
         >
           erstellen
+        </button>
+        <button
+          style={{margin: '2%'}}
+          className="button"
+          onClick={() => closeModal(false)}
+        >
+          abbrechen
         </button>
       </div>
     </div>

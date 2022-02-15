@@ -13,7 +13,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import WorkingPage from './components_old/WorkingPage';
-import Admin from './components_old/Admin'
+import Admin from './components/Admin'
 import SimpleForm from './components_old/SimpleForm';
 import Form from './components_old/Form';
 import ShowHTMLFormular from './components_old/ShowHTMLFormular';
