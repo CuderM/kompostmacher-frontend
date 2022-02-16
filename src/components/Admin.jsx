@@ -102,13 +102,13 @@ export default function Admin() {
     const customStyles = {
         content: {
           top: "15%",
-          left: "25%",
-          right: "25%",
+          left: "5%",
+          right: "5%",
           bottom: "auto",
           background: "#0C0F1F",
           color: "white",
           borderColor: '#592901',
-          borderWidth: '2px'
+          borderWidth: '2px',
         },
     };
 
@@ -323,6 +323,7 @@ export default function Admin() {
                 onRequestClose={closeModal}
                 style={customStyles}
                 overlayClassName="Overlay"
+                
                 ariaHideApp={false}
             >
                 <Form
