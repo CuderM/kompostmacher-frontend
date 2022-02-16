@@ -38,8 +38,8 @@ const Login = ({ setUserStatus }) => {
       authService
         .login(user)
         .then((data) => {
-          history.push("/overview");
           setUserStatus(user);
+          history.push("/overview");
         })
         .catch((err) => {
           toast.error(err + ": Wrong email or password");

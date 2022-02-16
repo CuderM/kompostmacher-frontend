@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { userService } from '../services/userService';
+import { userService } from '../../../src/services/userService';
 import TextInputWithValidation from './TextInputValidation';
 import { useHistory, useRouteMatch, useParams} from 'react-router-dom';
 import'bootstrap-icons/font/bootstrap-icons.css'; 

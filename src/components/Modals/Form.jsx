@@ -5,6 +5,7 @@ import'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function Form ({closeModal, entity, entityType}) {
     const [currEntity, setCurrEntity] = useState(entity)
+    const [updateOrCreate, setUpdateOrCreate] = useState('bearbeiten')
 
     const formValidationInfoDEMO = {
         form: {
@@ -65,7 +66,11 @@ export default function Form ({closeModal, entity, entityType}) {
 
     useEffect(() => {
         if(entity === 'new') setCurrEntity(getExmplEntity(entityType))
-        if(entityType === 'Benutzer' && entity !== 'new') setFormValidationInfo(formValidationInfoUserCorr)
+        setUpdateOrCreate(entity === 'new' ? 'erstellen' : 'bearbeiten')
+        if(entityType === 'Benutzer' && entity !== 'new') {
+          setFormValidationInfo(formValidationInfoUserCorr) 
+          setCurrEntity({...currEntity, password: ''})
+        }
         if(entityType === 'Benutzer' && entity === 'new') setFormValidationInfo(formValidationInfoUserWrong)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [entity, entityType,])
@@ -215,7 +220,7 @@ export default function Form ({closeModal, entity, entityType}) {
     return (
         <div className={"full " + getTheme()}>
             <div className="grayback">
-                <h4>{entityType} {entity === 'new' ? 'erstellen' : 'bearbeiten'}</h4>
+                <h4>{entityType} {updateOrCreate}</h4>
                 {
                     Object.keys(currEntity).map(attr => {
                         if(attr !== '_id' && attr !== 'userId' && attr !== 'adminId' && attr !== 'admin' && attr !== 'htmlFormular') {
@@ -241,7 +246,7 @@ export default function Form ({closeModal, entity, entityType}) {
                         disabled={!formValidationInfo["form"]?.valid}
                         onClick={() => closeModal(currEntity)}
                         >
-                        erstellen
+                        {updateOrCreate}
                     </button>
                     <button
                         style={{margin: '2%'}}

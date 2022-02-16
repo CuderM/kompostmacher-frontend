@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams, useHistory} from 'react-router-dom';
 import { toast } from 'react-toastify';
 import DOMPurify from 'dompurify'
-import { collectionConfirmationService } from '../services/collectionConfirmationService';
+import { collectionConfirmationService } from '../../../src/services/collectionConfirmationService';
 
 const ShowHTMLFormular = () => {
     const history = useHistory();

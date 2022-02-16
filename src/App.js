@@ -6,17 +6,17 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { authService } from './services/authService';
 
-import MyNavbar from './components_old/Navbar.jsx';
-import MySwitch from "./components_old/Switch.jsx"
+import MyNavbar from './components/Utils/Navbar';
+import MySwitch from "./components/Utils/Switch.jsx"
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import WorkingPage from './components_old/WorkingPage';
+import WorkingPage from './components/WorkingPage';
 import Admin from './components/Admin'
-import SimpleForm from './components_old/SimpleForm';
-import Form from './components_old/Form';
-import ShowHTMLFormular from './components_old/ShowHTMLFormular';
+import SimpleForm from './components/Utils/SimpleForm';
+import Form from './components/Modals/Form';
+import ShowHTMLFormular from './components/Utils/ShowHTMLFormular';
 import Signup from './components/User/SignUp';
 import Login from './components/User/Login';
 import Settings from "./components/User/Settings.jsx";

@@ -93,16 +93,12 @@ function serializePayload(payload, headers) {
 async function call(url, requestOptions) {
   let response = null;
   let body = null;
-  try {
     response = await fetch(url, requestOptions);
+    if(response.status === 401) {
+      //back to login page
+    }
     body = await getBody(response);
-  }
-  catch(err) {
-    console.log(err)
-    body = err
-  }
  
-
   return body;
 }
 
@@ -124,8 +120,6 @@ async function getBody(response) {
     //console.log(response.status, responseBody || response.statusText);
     throw new Error(response.status, responseBody || response.statusText);
   }
-
-  
 
   return responseBody;
 }

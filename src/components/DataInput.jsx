@@ -74,13 +74,14 @@ function DataInput() {
 
     const customStyles = {
         content: {
-          top: "15%",
-          left: "25%",
-          right: "25%",
-          bottom: "auto",
-          background: "#0C0F1F",
-          color: "white",
-          border: "none",
+            top: "15%",
+            left: "25%",
+            right: "25%",
+            bottom: "auto",
+            background: "#0C0F1F",
+            color: "white",
+            borderColor: '#592901',
+            borderWidth: '2px'
         },
     };
 
