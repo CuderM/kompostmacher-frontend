@@ -38,8 +38,16 @@ const Login = ({ setUserStatus }) => {
       authService
         .login(user)
         .then((data) => {
-          setUserStatus(user);
-          history.push("/overview");
+          authService
+            .getCurrentUser()
+            .then((data) => {
+              setUserStatus(data);
+              history.push("/overview");
+            })
+            .catch((err) => {
+              toast.error(err);
+            });
+          //setUserStatus(user);
         })
         .catch((err) => {
           toast.error(err + ": Wrong email or password");
@@ -197,9 +205,5 @@ const Login = ({ setUserStatus }) => {
     </div>
   );
 };
-
-// Login.propTypes = {
-//     setToken: PropTypes.func.isRequired
-// }
 
 export default Login;
