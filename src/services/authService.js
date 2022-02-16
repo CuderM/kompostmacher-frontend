@@ -61,7 +61,6 @@ function getCurrentUser() {
 }
 
 function get(url, headers) {
-  console.log(url);
   return dataService.get(url, combineHeadersWithAuthInfo(headers));
 }
 

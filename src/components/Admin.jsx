@@ -121,7 +121,6 @@ export default function Admin() {
         try {   
             collectionConfirmationService.getAll()
                 .then(_collectionConfirmation => {
-                    console.log(_collectionConfirmation)
                     // _collectionConfirmation.forEach(cc => {
                     //     cc.date = cc.customer.date;
                     // });
@@ -258,9 +257,9 @@ export default function Admin() {
                     className='customerGrid'
                     tableHeader={[
                         { key: 'name', label: 'Name', sortable: true },
-                        { key: 'adresse', label: 'Adresse'},
+                        // { key: 'adresse', label: 'Adresse'},
                         { key: 'anschrift', label: 'Anschrift'},
-                        { key: 'email', label: 'Email'}
+                        // { key: 'email', label: 'Email'}
                     ]}
                     openForm={openForm}
                     _delete={_deleteCustomer}
@@ -270,6 +269,7 @@ export default function Admin() {
                     entity='Kunden'
                 ></TableEntities>
             </div>
+            
             <div className='grayback'>
                 <TableEntities
                     className='productGrid'
@@ -277,7 +277,7 @@ export default function Admin() {
                         { key: 'name', label: 'Name'},
                         { key: 'einheit', label: 'Einheit'},
                         { key: 'spezifikation', label: 'Spezifikation'},
-                        { key: 'schluesselnummer', label: 'Schluesselnummer'}
+                        // { key: 'schluesselnummer', label: 'Schluesselnummer'}
                     ]}
                     openForm={openForm}
                     _delete={_deleteProduct}
@@ -332,6 +332,5 @@ export default function Admin() {
                 ></Form>
             </Modal>
         </div>
-        
     )
 }

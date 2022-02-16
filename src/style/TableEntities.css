@@ -44,3 +44,22 @@
     padding-right: 10px;
     grid-area: ccs;
 }
+
+.buttonDelete {
+    border: none;
+    background-color: white;
+    color: red;
+    font-size: larger;
+}
+
+.buttonTd {
+  text-align: right;
+}
+
+.Table {
+    width: 100%;
+}
+
+tr {
+    border-bottom: 1px solid #ddd;
+}

@@ -43,7 +43,6 @@ function DataInput() {
         try {           
             customerService.getAll()
                 .then(_customers => {
-                    console.log(_customers)
                     setCustomers(_customers);
                     if(_customers.length > 0) {
                         setSelectedInput({...selectedInput, 'customer':  _customers[0]});
@@ -55,7 +54,6 @@ function DataInput() {
                 });
             productService.getAll()
                 .then(_products => {
-                    console.log(_products)
                     setProducts(_products);
                     if(_products.length > 0)  {
                         setCurrProduct({...currProduct, 'product': _products[0]})
