@@ -53,7 +53,7 @@ export default function TableEntities(props) {
                                 // })
                             }
                             <td key={'td_' + ent._id} className="buttonTd">
-                                <button class="buttonDelete bi bi-trash" 
+                                <button className="buttonDelete bi bi-trash" 
                                     onClick={() => _delete(ent)}>
                                 </button>
                             </td>

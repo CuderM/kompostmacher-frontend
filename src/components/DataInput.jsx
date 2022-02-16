@@ -14,6 +14,7 @@ import DOMPurify from 'dompurify'
 import { collectionConfirmationService } from '../services/collectionConfirmationService';
 
 import '../style/DataInput.css'
+import { useHistory } from 'react-router-dom';
 
 function DataInput() {
     const [customers, setCustomers] = useState([]);
@@ -27,6 +28,8 @@ function DataInput() {
     const [isChecked, setIsChecked] = useState('');
     const [htmlFormular, setHTMLFormular] = useState('');
     const [displaySign, setDisplaySign] = useState('none');
+
+    const history = useHistory()
 
 
     const [modalIsOpenAddProduct, setModalIsOpenAddProduct] = useState(false);
@@ -50,6 +53,9 @@ function DataInput() {
                     }
                 })
                 .catch(err => {
+                    if(err.status === 401) {
+                        history.push('/login')
+                    }
                     toast.error('Failed to load customers', err);
                 });
             productService.getAll()
