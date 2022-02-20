@@ -84,8 +84,9 @@ function DataInput() {
             bottom: "auto",
             background: "#0C0F1F",
             color: "white",
-            borderColor: '#592901',
-            borderWidth: '2px'
+            borderColor: 'darkgrey',
+            borderWidth: '2px',
+            borderRadius: '20px',
         },
     };
 
@@ -192,8 +193,7 @@ function DataInput() {
     function save() {
         collectionConfirmationService.create({ to: selectedInput.customer.email, htmlFormular: addSignToHTML(htmlFormular, `<div id="footer" style="display: ${displaySign}"><div id="unterschriftwrapper"><div id="unterschrift">Unterschrift Kunde: ____________________________________</div></div></div><div style="display: ${displaySign}" id="bestaetigung">Die Übernahme der angegebenen Menge wurde vom entsprechenden Zuständigen bestätigt<div style="display: ${displaySign}"><br/><input name="sign" type="checkbox" ${isChecked} />Niemanden Angetroffen</div></div>`) })
             .then(data => {
-                console.log(data);
-                toast.info(data)
+
             })
             .catch(err => {
                 toast.error(err);
@@ -240,14 +240,14 @@ function DataInput() {
                     type="submit" 
                     className="button"
                     onClick={() => setModalIsOpenAddProduct(true)/*addProduct*/}>
-                    add Produkt
+                    Produkt hinzufügen
                 </button>
                 <br/><br/>
                 <button 
                     type="submit" 
                     className="button"
                     onClick={submit}>
-                    Submit
+                    Bestätigen
                 </button>
                 <br/>
             </div>

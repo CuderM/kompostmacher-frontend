@@ -107,8 +107,9 @@ export default function Admin() {
           bottom: "auto",
           background: "#0C0F1F",
           color: "white",
-          borderColor: '#592901',
+          borderColor: 'darkgrey',
           borderWidth: '2px',
+          borderRadius: '20px',
         },
     };
 

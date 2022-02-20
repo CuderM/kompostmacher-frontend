@@ -66,7 +66,7 @@ export default function Form ({closeModal, entity, entityType}) {
 
     useEffect(() => {
         if(entity === 'new') setCurrEntity(getExmplEntity(entityType))
-        setUpdateOrCreate(entity === 'new' ? 'erstellen' : 'bearbeiten')
+        setUpdateOrCreate(entity === 'new' ? 'Erstellen' : 'Bearbeiten')
         if(entityType === 'Benutzer' && entity !== 'new') {
           setFormValidationInfo(formValidationInfoUserCorr) 
           setCurrEntity({...currEntity, password: ''})
@@ -253,7 +253,7 @@ export default function Form ({closeModal, entity, entityType}) {
                         className="button"
                         onClick={() => closeModal('')}
                     >
-                        abbrechen
+                        Abbrechen
                     </button>
                 </div>
             </div>
